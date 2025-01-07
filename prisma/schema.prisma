@@ -23,15 +23,17 @@ model file {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String
+  id       Int      @id @default(autoincrement())
+  username String   @unique
   password String
   file     file[]
 }
 
 model Session {
-  id        String   @id
-  sid       String   @unique
-  data      String   @db.VarChar(255)
-  expiresAt DateTime
+  id                 String   @id @default(cuid())
+  sid                String   @unique
+  data               String
+  expiresAt          DateTime
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 }

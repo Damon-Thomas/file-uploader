@@ -12,6 +12,19 @@ const createUser = async (username, password) => {
   return user
 }
 
+const saveFile = async (filename, authorId, fileContent) => {
+    const file = await prisma.file.create({
+        data: {
+            filename: filename,
+            content: fileContent,
+            author: {
+                connect: { id: authorId },
+            }
+            
+        },
+    })
+    return file
+}
 const getFiles = async (userid) => {
     const files = await prisma.file.findMany({
         where: {
@@ -23,5 +36,6 @@ const getFiles = async (userid) => {
 
 module.exports = {
   createUser,
-  getFiles
+  getFiles,
+  saveFile,
 }

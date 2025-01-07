@@ -10,11 +10,9 @@
     <%- include('nav') %>
     <div class="header">
       <h1 class="title">Home</h1>
-      <% if (locals.currentUser) { if (locals.currentUser.member) {%>
-      <h3 class="accountType">Member Account</h3>
-      <% }else{ %>
-      <h3 class="accountType">Non-Member Account</h3>
-      <% }} %>
+      <% if (locals.currentUser) { %>
+        <h2>Welcome, <%= locals.currentUser.username %></h2>
+      <% } %>
     </div>
     <form action="/fileupload" enctype="multipart/form-data" method="post">
         <div class="form-group">

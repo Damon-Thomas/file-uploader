@@ -23,7 +23,7 @@ appRouter.use(
     resave: true,
     saveUninitialized: true,
     store: new PrismaSessionStore(
-      new PrismaClient(),
+      prisma,
       {
         checkPeriod: 2 * 60 * 1000,  //ms
         dbRecordIdIsSessionId: true,
@@ -37,38 +37,40 @@ appRouter.use(passport.session());
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      const { rows } = await prisma.query(
-        "SELECT * FROM users WHERE username = $1",
-        [username]
-      );
-      const user = rows[0];
-      
+      const user = await prisma.user.findUnique({
+        where: {
+          username: username,
+        },
+      });
 
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
+
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
         // passwords do not match!
         return done(null, false, { message: "Incorrect password" });
       }
+
       return done(null, user);
     } catch (err) {
       return done(err);
     }
   })
 );
+
 passport.serializeUser((user, done) => {
-  done(null, user.userid);
+  done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const { rows } = await prisma.query("SELECT * FROM users WHERE userid = $1", [
-      id,
-    ]);
-    const user = rows[0];
-
+    const user = await prisma.user.findUnique({
+      where: {
+        id: id,
+      },
+    });
     done(null, user);
   } catch (err) {
     done(err);
@@ -80,21 +82,15 @@ appRouter.use((req, res, next) => {
   next();
 });
 
-
-
 appRouter.get('/', fileController.getHome)
 appRouter.get('/login', fileController.getLogin)
 appRouter.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
-  failureFlash: true
 }))
+appRouter.get('/logout', fileController.logOut)
 appRouter.get('/signup', fileController.getSignup)
 appRouter.post('/signup', fileController.postSignup)
-appRouter.post('/fileupload', upload.single('uploaded_file'), function (req, res) {
-  // req.file is the name of your file in the form above, here 'uploaded_file'
-  // req.body will hold the text fields, if there were any 
-  console.log(req.file, req.body)
-});
+appRouter.post('/fileupload', upload.single('uploaded_file'), fileController.postFileUpload);
 
 module.exports = appRouter
