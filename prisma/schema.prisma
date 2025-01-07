@@ -14,22 +14,24 @@ datasource db {
 }
 
 model file {
-   id        Int      @id @default(autoincrement())
-   content   String   @db.VarChar(255) 
-   createdAt DateTime @default(now())
-   author    User     @relation(fields: [authorId], references: [id])
-   authorId  Int     
+  id        Int      @id @default(autoincrement())
+  filename  String   @db.VarChar(255)
+  content   String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String
-  password  String
+  id       Int    @id @default(autoincrement())
+  username String
+  password String
+  file     file[]
 }
 
 model Session {
   id        String   @id
   sid       String   @unique
-  data      String   @db.MediumText  // MediumText may be needed for MySql
-  expiresAt   DateTime
+  data      String   @db.VarChar(255)
+  expiresAt DateTime
 }

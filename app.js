@@ -1,11 +1,12 @@
 const expressSession = require('express-session');
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('@prisma/client') 
 const express = require("express");
 const app = express();
 const path = require("node:path");
 
 const appRouter = require("./routes/routes.js");
+// const { default: prisma } = require('./model/client.js') testing if this is session problem
 
 const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
