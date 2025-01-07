@@ -1,0 +1,8 @@
+<div class="nav">
+    <a href="/">Home</a>
+    
+    <% if (!locals.currentUser) { %>
+    <a href="/sign-up">Sign Up</a>
+    <a href="/log-in">Log in</a>
+    <% } %>
+</div>

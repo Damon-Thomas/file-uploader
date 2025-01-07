@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/messageForm.css">
+    <title>Sign Up</title>
+  </head>
+
+  <body>
+    <div class="content">
+      <h1 class="formTitle">Sign Up Here</h1>
+      <%- include('nav') %>
+      
+        <form class="formContainer" action="/sign-up" method="POST" class="signUpForm">
+            <div class="inputContainer">
+              <label class="normalLabel" for="userName">Username:</label
+              ><input class="smallInput" type="text" name="userName" id="userName" maxlength="20" />
+              <%- include('formError', {errors: errors, selector: 'userName'}) %>
+            </div>
+            <div class="inputContainer">
+              <label class="normalLabel" for="password">Password:</label
+              ><input class="smallInput" type="text" name="password" id="password" />
+              <%- include('formError', {errors: errors, selector: 'password'}) %>
+            </div>
+            <div class="inputContainer">
+              <label class="normalLabel" for="confirmPassword">Confirm Password:</label
+              ><input class="smallInput" type="text" name="confirmPassword" id="confirmPassword" />
+              <%- include('formError', {errors: errors, selector: 'confirmPassword'}) %>
+            </div>
+            <button class="submitButton" type="submit">Sign Up</button>
+        </form>
+      
+    </div>
+  </body>
+</html>

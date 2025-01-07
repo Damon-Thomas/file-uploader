@@ -7,6 +7,15 @@
 </head>
 <body>
     <h1>File Uploader</h1>
+    <%- include('nav') %>
+    <div class="header">
+      <h1 class="title">Home</h1>
+      <% if (locals.currentUser) { if (locals.currentUser.member) {%>
+      <h3 class="accountType">Member Account</h3>
+      <% }else{ %>
+      <h3 class="accountType">Non-Member Account</h3>
+      <% }} %>
+    </div>
     <form action="/fileupload" enctype="multipart/form-data" method="post">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="File Name" name="fileName">
