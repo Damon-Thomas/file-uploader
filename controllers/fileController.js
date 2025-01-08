@@ -8,7 +8,7 @@ const upload = multer({ dest: './public/data/uploads/' })
 
 const getHome = asyncHandler(async (req, res) => {  
     if (!req.isAuthenticated()) {
-        return res.redirect('/login', currentUrl = req.url);
+        return res.redirect('/login');
     } else { 
         console.log('authenticated', req.isAuthenticated(), req.user);
         let files = await query.getFiles(req.user.userid);
@@ -27,14 +27,14 @@ const logOut = asyncHandler(async (req, res) => {
         if (err) {
           console.log(err);
         }
-        res.redirect("/login", currentUrl = req.url);
+        res.redirect("/login");
       });
 })
 
 const postLogin = asyncHandler(async (req, res, getHome, errorPage) => {
     passport.authenticate('local', function(err, user, info) {
         if (err) { return errorPage(err); }
-        if (!user) { return res.redirect('/login', {failure: null}); }
+        if (!user) { return res.render('/login', {failure: null}); }
 
         req.login(user, function(err) {
             if (err) { return errorPage(err); }
