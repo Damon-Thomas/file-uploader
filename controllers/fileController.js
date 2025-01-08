@@ -5,15 +5,25 @@ const bcrypt = require("bcryptjs");
 require('dotenv').config();
 const multer  = require('multer')
 const upload = multer({ dest: './public/data/uploads/' })
+const path = require('path');
+const ejs = require('ejs');
+const passport = require('passport');
+
+
 
 const getHome = asyncHandler(async (req, res) => {  
     if (!req.isAuthenticated()) {
         return res.redirect('/login');
     } else { 
         console.log('authenticated', req.isAuthenticated(), req.user);
-        let files = await query.getFiles(req.user.userid);
-        console.log(req.url)
-        return res.render('index', { user: req.user, files: files, currentUrl: req.url });
+        let folders = await query.getFolders(req.user.userid);
+        console.log('url', req.url)
+        console.log('folder', folders);
+        // modified ai code
+        const folderCreationHtml = await ejs.renderFile(path.join(__dirname, '../views/folderCreation.ejs'));
+        res.render('index', { currentUrl: req.url, user: req.user, folders: folders, folderCreationHtml });
+        // mine commented out
+        // return res.render('index', { user: req.user, folders: folders, currentUrl: req.url });
     }
 });
 
@@ -68,6 +78,20 @@ const postFileUpload = asyncHandler(async (req, res, getHome) => {
     getHome(req, res);
 });
 
+const postFolderCreation = asyncHandler(async (req, res) => {
+    try {
+        console.log('req.body', req.body.inputFileName);
+        console.log('req.user', req.user);
+        let folder = await query.addFolder(req.body.inputFileName, req.user.id);
+        console.log('passed folder', folder);
+        res.redirect('/');
+        
+    } catch (error) {
+        console.error('Error creating folder:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 module.exports = {
     getHome,
     getLogin,
@@ -76,4 +100,5 @@ module.exports = {
     getSignup,
     postSignup,
     postFileUpload,
+    postFolderCreation
 };

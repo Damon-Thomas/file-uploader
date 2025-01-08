@@ -92,5 +92,6 @@ appRouter.get('/logout', fileController.logOut)
 appRouter.get('/signup', fileController.getSignup)
 appRouter.post('/signup', fileController.postSignup)
 appRouter.post('/fileupload', upload.single('uploaded_file'), fileController.postFileUpload);
+appRouter.post('/folderCreation', fileController.postFolderCreation);
 
 module.exports = appRouter

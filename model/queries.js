@@ -54,14 +54,18 @@ const getFolders = async (userid) => {
 }
 
 const addFolder = async (foldername, authorId) => {
-  await prisma.folder.create({
+  let folder = await prisma.folder.create({
     data: {
       foldername: foldername,
-      user: {
-        connect: { id: authorId },
-      },
-    },
-  })}
+    author: {
+            // create: UserCreateWithoutFolderInput | UserUncheckedCreateWithoutFolderInput,
+            // connectOrCreate: UserCreateOrConnectWithoutFolderInput,
+            connect: {id: authorId}
+           }
+    }  
+  })
+  return folder
+}
 
   const editFolder = async (folderId, foldername) => {
     await prisma.folder.update({

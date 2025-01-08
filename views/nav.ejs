@@ -1,6 +1,9 @@
 <div class="nav">
     
     <% if (locals.currentUser) { %>
+        <% if (locals.currentUrl != '/') { %>
+            <a href="/admin">Admin</a>
+        <% } %>
         <a href="/">Home</a>
         <a href="/logout">Log out</a>
     <% } %>
