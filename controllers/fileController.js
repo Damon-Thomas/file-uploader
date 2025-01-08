@@ -3,6 +3,8 @@ const query = require("../model/queries.js");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 require('dotenv').config();
+const multer  = require('multer')
+const upload = multer({ dest: './public/data/uploads/' })
 
 const getHome = asyncHandler(async (req, res) => {  
     if (!req.isAuthenticated()) {
@@ -63,7 +65,6 @@ const postSignup = asyncHandler(async (req, res) => {
 const postFileUpload = asyncHandler(async (req, res, getHome) => {
     console.log('req.body', req.body);
     console.log('req.file', req.file);
-    query.saveFile(req.file.filename, req.user.userid, req.file);
     getHome(req, res);
 });
 

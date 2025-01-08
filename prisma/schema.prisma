@@ -20,6 +20,8 @@ model file {
   createdAt DateTime @default(now())
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
+  folder    Folder   @relation(fields: [folderId], references: [id])
+  folderId  Int
 }
 
 model User {
@@ -27,13 +29,22 @@ model User {
   username String   @unique
   password String
   file     file[]
+  Folder   Folder[]
+}
+
+model Folder {
+  id         Int    @id @default(autoincrement())
+  foldername String @db.VarChar(255)
+  author     User   @relation(fields: [authorId], references: [id])
+  authorId   Int
+  file       file[]
 }
 
 model Session {
-  id                 String   @id @default(cuid())
-  sid                String   @unique
-  data               String
-  expiresAt          DateTime
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
+  id        String   @id @default(cuid())
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
