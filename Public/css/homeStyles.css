@@ -4,15 +4,27 @@
 :root{
     --folderGap: calc(10px + .25vh);
     --folderInnerGap: calc(15px + .25vw);
+    --folderBackground: #f5f5f5;
+    --deleteHeight: calc(25px + .5vw);
+    --folderPadding: calc(10px + .5vw);
+    --folderPaddingHeight: calc(5px + .25vh);
 }
 
 .folder{
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: var(--folderInnerGap);
     align-items: center;
-    background-color: #f5f5f5;
-    width: 100%;
+    background-color: var(--folderBackground);
+    padding: var(--folderPaddingHeight) var(--folderPadding) ;
+    width: calc(100% - var(--folderPadding) * 2);
+    
+}
+
+.leftContent, .centerContent, .rightContent{
+    display: flex;
+    gap: var(--folderInnerGap);
+    align-items: center;
 }
 
 .fileCabinet{
@@ -22,4 +34,27 @@
     justify-content: flex-start;
     align-items: flex-start;
     background-color: #ffffff;
+}
+
+.folderName{
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #000000;
+    border: none;
+    background-color: var(--folderBackground);
+}
+
+.deleteFolderButton{
+    background-color: var(--folderBackground);
+    border: none;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.deletesvg{
+    fill: #ff0000;
+    height: var(--deleteHeight);
+    width: var(--deleteHeight);
 }

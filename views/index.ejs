@@ -20,13 +20,23 @@
     <div class="fileCabinet">
       <% for(let i = 0; i < folders.length; i++) { %>
         <div class="folder">
-          <button class="folderButton">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
-          </button>
-          <form class="folderNameForm" data-folder-id="<%= folders[i].id %>">
-            <input type="text" name="folderName" value="<%= folders[i].foldername %>" class="folderName">
-          </form>
-        </div>
+          <div class="leftContent">
+            <button class="folderButton">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h240l80 80h320q33 0 56.5 23.5T880-640v400q0 33-23.5 56.5T800-160H160Zm0-80h640v-400H447l-80-80H160v480Zm0 0v-480 480Z"/></svg>
+            </button>
+            <form class="folderNameForm" data-folder-id="<%= folders[i].id %>">
+              <input type="text" name="folderName" value="<%= folders[i].foldername %>" class="folderName">
+            </form>
+          </div>
+          <div class="centerContent">
+
+          </div>
+          <div class="rightContent">
+            <button class="deleteFolderButton svgButton" data-folder-id="<%= folders[i].id %>">
+              <svg class="deletesvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+            </button>
+          </div> 
+          </div>
       <% } %>
     </div>
 
@@ -86,7 +96,7 @@
     </script>
     
     
-    <br>
+  
     <form action="/fileupload" enctype="multipart/form-data" method="post">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="File Name" name="fileName">
