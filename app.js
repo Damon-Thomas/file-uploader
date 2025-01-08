@@ -12,7 +12,7 @@ app.use(express.static(assetsPath));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-
+app.use(express.json());
 
 app.use("/", appRouter);
 app.get("*", (req, res) => res.render("./errors/404.ejs"));

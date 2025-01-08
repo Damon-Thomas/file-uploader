@@ -49,6 +49,9 @@ const getFolders = async (userid) => {
     where: {
       authorId: userid,
     },
+    orderBy: {
+      foldername: 'asc',
+    },
   })
   return folders
 }
@@ -103,6 +106,14 @@ const addFolder = async (foldername, authorId) => {
       },
     })}
 
+    const updateFolderName = async (folderId, folderName) => {
+      const updatedFolder = await prisma.folder.update({
+        where: { id: folderId },
+        data: { foldername: folderName },
+      });
+      return updatedFolder;
+    };
+
 module.exports = {
   createUser,
   getFiles,
@@ -113,4 +124,5 @@ module.exports = {
   editFolder,
   deleteFolder,
   deleteFile,
+  updateFolderName
 }

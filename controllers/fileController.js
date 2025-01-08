@@ -92,6 +92,22 @@ const postFolderCreation = asyncHandler(async (req, res) => {
     }
 });
 
+const updateFolderName = asyncHandler(async (req, res) => {
+    const folderId = req.params.id;
+    const { folderName } = req.body;
+    console.log('folderName', folderName);
+    console.log(req.body)
+    console.log(req.params)
+  try {
+    console.log('folderId', folderId, typeof folderId);
+    const updatedFolder = await query.updateFolderName(parseInt(folderId), folderName);
+    res.json(updatedFolder);
+  } catch (error) {
+    console.error('Error updating folder name:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 module.exports = {
     getHome,
     getLogin,
@@ -100,5 +116,6 @@ module.exports = {
     getSignup,
     postSignup,
     postFileUpload,
-    postFolderCreation
+    postFolderCreation, 
+    updateFolderName,
 };

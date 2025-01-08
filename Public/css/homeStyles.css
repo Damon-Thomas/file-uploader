@@ -1,0 +1,25 @@
+
+
+
+:root{
+    --folderGap: calc(10px + .25vh);
+    --folderInnerGap: calc(15px + .25vw);
+}
+
+.folder{
+    display: flex;
+    justify-content: flex-start;
+    gap: var(--folderInnerGap);
+    align-items: center;
+    background-color: #f5f5f5;
+    width: 100%;
+}
+
+.fileCabinet{
+    display: flex;
+    flex-direction: column;
+    gap: var(--folderGap);
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: #ffffff;
+}
