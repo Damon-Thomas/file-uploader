@@ -41,16 +41,16 @@ const logOut = asyncHandler(async (req, res) => {
       });
 })
 
-const postLogin = asyncHandler(async (req, res, getHome, errorPage) => {
+const postLogin = asyncHandler(async (req, res) => {
+    console.log('in postLogin');
     passport.authenticate('local', function(err, user, info) {
         if (err) { return errorPage(err); }
-        if (!user) { return res.render('/login', {failure: null}); }
-
         req.login(user, function(err) {
-            if (err) { return errorPage(err); }
+            if (err) { 
             console.log('user', user);
-            getHome(req, res);
+            res.redirect('/login');}
         });
+        if (!user) { return res.render('login', {failure: null}); }
     })(req, res);
 });
 
@@ -59,20 +59,40 @@ const getSignup = asyncHandler(async (req, res) => {
 });
 
 const postSignup = asyncHandler(async (req, res) => {
+    console.log('in postSignup');
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         res.render('signup', { errors: errors.array() });
     }
     const { userName, password } = req.body;
+    console.log('userName', userName, 'password', password);
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await query.createUser(userName, hashedPassword);
-    let files = await query.getFiles(user.userid);
-    console.log('files', files), console.log('user', user);
-    res.render('index', {files: files, user: user});
+    try{
+        const user = await query.createUser(userName, hashedPassword);
+        req.login(user, function(err) {
+            if (err) { 
+                console.log('Error logging in user after signup:', err);
+                return next(err);
+            }
+            return res.redirect('/');
+        });
+    }
+    catch (error) {
+        if (error.message === 'Username already exists') {
+            console.log('errors', error);
+          res.render('signup', { errors: [{ msg: error.message }] });
+        } else {
+          console.error('Error creating user:', error);
+          res.status(500).send('Internal Server Error');
+        }
+      }
+    // let files = await query.getFiles(user.userid);
+    // console.log('files', files), console.log('user', user);
+    
 });
 
-const postFileUpload = asyncHandler(async (req, res, getHome) => {
+const postFileUpload = asyncHandler(async (req, res) => {
     console.log('req.body', req.body);
     console.log('req.file', req.file);
     getHome(req, res);
@@ -108,6 +128,19 @@ const updateFolderName = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteFolder = asyncHandler(async (req, res) => {
+    const folderId = req.params.id;
+    console.log("in controller", folderId);
+    try {
+      await query.deleteFolder(parseInt(folderId));
+  
+      res.json({ message: 'Folder deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting folder:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });    
+
 module.exports = {
     getHome,
     getLogin,
@@ -118,4 +151,5 @@ module.exports = {
     postFileUpload,
     postFolderCreation, 
     updateFolderName,
+    deleteFolder,
 };

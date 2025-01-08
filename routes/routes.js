@@ -94,5 +94,5 @@ appRouter.post('/signup', fileController.postSignup)
 appRouter.post('/fileupload', upload.single('uploaded_file'), fileController.postFileUpload);
 appRouter.post('/folderCreation', fileController.postFolderCreation);
 appRouter.post('/update-folder/:id', fileController.updateFolderName);
-
+appRouter.delete('/delete-folder/:id', fileController.deleteFolder);
 module.exports = appRouter

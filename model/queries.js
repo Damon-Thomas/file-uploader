@@ -1,17 +1,28 @@
 // Description: This file contains the queries for the database.
-const { PrismaClient } = require('@prisma/client')
+const { PrismaClient, Prisma } = require('@prisma/client')
 const { use } = require('passport')
 const prisma = new PrismaClient()
 
 const createUser = async (username, password) => {
-  const user = await prisma.user.create({
-    data: {
-      username,
-      password,
-    },
-  })
-  return user
-}
+  try {
+    const user = await prisma.user.create({
+      data: {
+        username,
+        password,
+      },
+    });
+    return user;
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2002') {
+        // Handle unique constraint violation
+        throw new Error('Username already exists');
+      }
+    }
+    // Handle other errors
+    throw error;
+  }
+};
 
 const saveFile = async (filename, authorId, fileContent) => {
     const file = await prisma.file.create({
@@ -99,7 +110,7 @@ const addFolder = async (foldername, authorId) => {
   }
 
   const deleteFolder = async (folderId) => {
-    deleteFilesInFolder(folderId)
+    await deleteFilesInFolder(folderId)
     await prisma.folder.delete({
       where: {
         id: folderId,
@@ -114,6 +125,10 @@ const addFolder = async (foldername, authorId) => {
       return updatedFolder;
     };
 
+  
+
+   
+
 module.exports = {
   createUser,
   getFiles,
@@ -124,5 +139,6 @@ module.exports = {
   editFolder,
   deleteFolder,
   deleteFile,
-  updateFolderName
+  updateFolderName,
+  
 }

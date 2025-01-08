@@ -35,10 +35,63 @@
             <button class="deleteFolderButton svgButton" data-folder-id="<%= folders[i].id %>">
               <svg class="deletesvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
             </button>
+            <div class="confirmDelete" style="display: none;">
+              <p>Are you sure?</p>
+              <button class="confirmYes" data-folder-id="<%= folders[i].id %>">Yes</button>
+              <button class="confirmCancel">Cancel</button>
+            </div>
           </div> 
           </div>
       <% } %>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.deleteFolderButton').forEach(button => {
+          button.addEventListener('click', (event) => {
+            const folderId = button.getAttribute('data-folder-id');
+            const confirmDelete = button.nextElementSibling;
+            button.style.display = 'none';
+            confirmDelete.style.display = 'block';
+          });
+        });
+
+        document.querySelectorAll('.confirmCancel').forEach(button => {
+          button.addEventListener('click', (event) => {
+            const confirmDelete = button.parentElement;
+            const deleteButton = confirmDelete.previousElementSibling;
+            confirmDelete.style.display = 'none';
+            deleteButton.style.display = 'block';
+          });
+        });
+
+        document.querySelectorAll('.confirmYes').forEach(button => {
+          button.addEventListener('click', async (event) => {
+            console.log('confirm delete fires on click');
+            const folderId = button.getAttribute('data-folder-id');
+            try {
+              const response = await fetch(`/delete-folder/${folderId}`, {
+                method: 'DELETE',
+              });
+              console.log('response:', response);
+
+              if (!response.ok) {
+                throw new Error('Failed to delete folder');
+              }
+
+              const result = await response.json();
+              console.log('Folder deleted:', result);
+
+              // Remove the folder from the DOM
+              const folderElement = button.closest('.folder');
+              folderElement.remove();
+            } catch (error) {
+              console.error('Error deleting folder:', error);
+            }
+          });
+        });
+      });
+    </script>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
