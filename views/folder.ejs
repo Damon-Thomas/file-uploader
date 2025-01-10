@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= folderName %></title>
+</head>
+<body>
+    <h2><%= folderName %></h2>
+    <div class="fileUploadContainer">
+        <h4 class="fileUpload">Upload a File:</h4>
+        <form action="/fileupload" enctype="multipart/form-data" method="post">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="File Name" name="fileName">
+              <input type="file" class="form-control-file" name="uploaded_file">
+              <input type="submit" value="Save File" class="btn btn-default">
+            </div>
+        </form>
+    </div>
+
+    <% for(let i = 0; i < files.length; i++) { %>
+        <div class="file">
+            <div class="leftContent">
+                <p class="fileInnerName"><%= files[i].filename %></p>
+                <!-- <p class="fileInnerUpDate"><%= files[i].creationDate %></p> -->
+            </div>
+            <div class="rightContent">
+                <button class="deleteFileButton svgButton" data-file-id="<%= files[i].id %>">
+                    <svg class="deletesvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+                </button>
+                <div class="confirmDelete" style="display: none;">
+                    <p>Are you sure?</p>
+                    <button class="confirmYes" data-file-id="<%= files[i].id %>">Yes</button>
+                    <button class="confirmCancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+</body>
+</html>
