@@ -10,12 +10,13 @@
     <%- include('nav', {url : url}) %>
     <div class="fileUploadContainer">
         <h4 class="fileUpload">Upload a File:</h4>
-        <form action="/fileupload" enctype="multipart/form-data" method="post">
+        <form id="fileUploadForm" action="/fileupload" enctype="multipart/form-data" method="post">
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="File Name" name="fileName">
-              <input type="file" class="form-control-file" name="uploaded_file">
+              <input type="text" class="form-control" placeholder="File Name" name="fileName" id="fileName">
+              <input type="file" class="form-control-file" name="uploaded_file" id="uploadedFile">
               <input type="hidden" name="folderId" value="<%= folderId %>"> <!-- Hidden input for folderId -->
               <input type="submit" value="Save File" class="btn btn-default">
+              <p class="error fileUpError" id="fileUpError" style="display: none;">Please Add a File Name and Attach a File</p>
             </div>
         </form>
     </div>
@@ -39,5 +40,6 @@
             </div>
         </div>
     <% } %>
+    <script src="/js/folderScripts.js"></script>
 </body>
 </html>

@@ -96,4 +96,5 @@ appRouter.post('/folderCreation', fileController.ensureAuthenticated, fileContro
 appRouter.post('/update-folder/:id', fileController.ensureAuthenticated, fileController.updateFolderName);
 appRouter.delete('/delete-folder/:id', fileController.ensureAuthenticated, fileController.deleteFolder);
 appRouter.get('/folder/:id', fileController.ensureAuthenticated, fileController.getFolder)
+appRouter.delete('/delete-file/:id', fileController.ensureAuthenticated, fileController.deleteFile)
 module.exports = appRouter

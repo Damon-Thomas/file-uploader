@@ -181,6 +181,18 @@ const getFolder = asyncHandler(async (req, res) => {
     }
   };
 
+  const deleteFile = asyncHandler(async (req, res) => {
+    const fileId = req.params.id;
+    console.log("deleting file", fileId);
+    try {
+      await query.deleteFile(parseInt(fileId));
+      res.json({ message: 'File deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting file:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
 module.exports = {
     getHome,
     getLogin,
@@ -193,5 +205,5 @@ module.exports = {
     updateFolderName,
     deleteFolder,
     getFolder,
-    ensureAuthenticated
+    ensureAuthenticated, deleteFile
 };
