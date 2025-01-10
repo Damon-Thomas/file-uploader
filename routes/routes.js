@@ -9,7 +9,8 @@ const fileController = require('../controllers/fileController.js')
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
-const prisma = require('../model/client.js')
+const prisma = require('../model/client.js');
+const { validator, loginValidator } = require("../controllers/validators/signupValidation.js");
 
 const appRouter = Router()
 
@@ -84,13 +85,10 @@ appRouter.use((req, res, next) => {
 
 appRouter.get('/', fileController.getHome)
 appRouter.get('/login', fileController.getLogin)
-appRouter.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-}))
+appRouter.post('/login', fileController.postLogin)
 appRouter.get('/logout', fileController.logOut)
 appRouter.get('/signup', fileController.getSignup)
-appRouter.post('/signup', fileController.postSignup)
+appRouter.post('/signup', validator, fileController.postSignup)
 appRouter.post('/fileupload', fileController.ensureAuthenticated, upload.single('uploaded_file'), fileController.postFileUpload);
 appRouter.post('/folderCreation', fileController.ensureAuthenticated, fileController.postFolderCreation);
 appRouter.post('/update-folder/:id', fileController.ensureAuthenticated, fileController.updateFolderName);

@@ -1,0 +1,37 @@
+:root {
+    --folderColor: #f0f0f0;
+    --folderHoverColor: #e0e0e0;
+    --folderBorderColor: #d0d0d0;
+    --folderBorderHoverColor: #c0c0c0;
+    --folderInnerGap: calc(10px + 1vw);
+    --cabinetGap: calc(10px + 1vw);
+}
+
+.fileCabinet {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cabinetGap);
+}
+
+.file {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--folderColor);
+    border: 1px solid var(--folderBorderColor);
+}
+
+.file:hover {
+    background-color: var(--folderHoverColor);
+    border: 1px solid var(--folderBorderHoverColor);
+}
+
+.leftContent, .rightContent {
+    display: flex;
+    gap: var(--folderInnerGap);
+}
+
+.fileInnerName, .fileInnerSize, .fileInnerUpDate{
+    font-size: large;
+    font-weight: bold;
+}

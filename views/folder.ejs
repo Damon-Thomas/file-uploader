@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/folderStyles.css">
     <title><%= folderName %></title>
 </head>
 <body>
@@ -21,25 +22,34 @@
         </form>
     </div>
 
-    <% for(let i = 0; i < files.length; i++) { %>
-        <div class="file">
-            <div class="leftContent">
-                <p class="fileInnerName"><%= files[i].filename %></p>
-                <p class="fileInnerSize"><%= files[i].size %></p>
-                <p class="fileInnerUpDate"><%= new Date(files[i].createdAt).toLocaleString() %></p>
-            </div>
-            <div class="rightContent">
-                <button class="deleteFileButton svgButton" data-file-id="<%= files[i].id %>">
-                    <svg class="deletesvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
-                </button>
-                <div class="confirmDelete" style="display: none;">
-                    <p>Are you sure?</p>
-                    <button class="confirmYes" data-file-id="<%= files[i].id %>">Yes</button>
-                    <button class="confirmCancel">Cancel</button>
+    <div class="fileCabinet">
+        <% for(let i = 0; i < files.length; i++) { %>
+            <div class="file">
+                <div class="leftContent">
+                    <p class="fileInnerName"><%= files[i].filename %></p>
+                    <p class="fileInnerSize"><%= files[i].size %></p>
+                    <p class="fileInnerUpDate"><%= new Date(files[i].createdAt).toLocaleString() %></p>
+                </div>
+                <div class="rightContent">
+                    <div class="downloadContainer">
+                        <button class="downloadButton">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="m720-120 160-160-56-56-64 64v-167h-80v167l-64-64-56 56 160 160ZM560 0v-80h320V0H560ZM240-160q-33 0-56.5-23.5T160-240v-560q0-33 23.5-56.5T240-880h280l240 240v121h-80v-81H480v-200H240v560h240v80H240Zm0-80v-560 560Z"/></svg>
+                        </button>
+                    </div>
+                    <div class="deleteContainer">
+                        <button class="deleteFileButton svgButton" data-file-id="<%= files[i].id %>">
+                            <svg class="deletesvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
+                        </button>
+                        <div class="confirmDelete" style="display: none;">
+                            <p>Are you sure?</p>
+                            <button class="confirmYes" data-file-id="<%= files[i].id %>">Yes</button>
+                            <button class="confirmCancel">Cancel</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    <% } %>
+        <% } %>
+    </div>
     <script src="/js/folderScripts.js"></script>
 </body>
 </html>

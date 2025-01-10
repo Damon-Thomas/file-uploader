@@ -20,17 +20,15 @@ const getHome = asyncHandler(async (req, res) => {
         console.log('url', req.url)
         console.log('folder', folders);
         console.log('user', req.user, 'userid', req.user.id);
-        // modified ai code
         const folderCreationHtml = await ejs.renderFile(path.join(__dirname, '../views/folderCreation.ejs'));
-        res.render('index', { currentUrl: req.url, user: req.user, folders: folders, folderCreationHtml });
-        // mine commented out
-        // return res.render('index', { user: req.user, folders: folders, currentUrl: req.url });
+        res.render('index', { url: req.url, user: req.user, folders: folders, folderCreationHtml });
+        
     }
 });
 
 const getLogin = asyncHandler(async (req, res) => {
-console.log('in getLogin', req.url);
-    return res.render('login', {failure: req.query.failure ? true: null, currentUrl: req.url});
+    
+    return res.render('login', {failure: req.query.failure ? true: null, url: req.url});
 });
 
 const logOut = asyncHandler(async (req, res) => {
@@ -44,6 +42,13 @@ const logOut = asyncHandler(async (req, res) => {
 
 const postLogin = asyncHandler(async (req, res) => {
     console.log('in postLogin');
+    const errors = validationResult(req);
+    
+    if (!errors.isEmpty()) {
+        console.log('errors', errors);
+        res.render('login', { failure: true, url: req.url});
+    }
+    else {
     passport.authenticate('local', function(err, user, info) {
         if (err) { return errorPage(err); }
         req.login(user, function(err) {
@@ -51,19 +56,21 @@ const postLogin = asyncHandler(async (req, res) => {
             console.log('user', user);
             res.redirect('/login');}
         });
-        if (!user) { return res.render('login', {failure: null}); }
+        if (!user) { return res.render('login', { failure: true, url: req.url}); }
     })(req, res);
+    }
 });
 
 const getSignup = asyncHandler(async (req, res) => {
-    return res.render('signup', {currentUrl: req.url, errors: null});
+    return res.render('signup', {url: req.url, errors: null});
 });
 
 const postSignup = asyncHandler(async (req, res) => {
     console.log('in postSignup');
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        res.render('signup', { errors: errors.array() });
+        res.render('signup', { url: req.url, errors: errors.array() });
+        return;
     }
     const { userName, password } = req.body;
     console.log('userName', userName, 'password', password);
