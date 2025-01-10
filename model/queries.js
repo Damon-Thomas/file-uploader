@@ -55,6 +55,16 @@ const getFiles = async (userid) => {
     return files
 }
 
+const getFilesByFolder = async (userid, folderId) => {
+    const files = await prisma.file.findMany({
+        where: {
+        authorId: userid,
+        folderId: folderId,
+        },
+    })
+    return files
+}
+
 const getFolders = async (userid) => {
   const folders = await prisma.folder.findMany({
     where: {
@@ -77,6 +87,15 @@ const addFolder = async (foldername, authorId) => {
             connect: {id: authorId}
            }
     }  
+  })
+  return folder
+}
+
+const getFolderById = async (folderId) => {
+  const folder = await prisma.folder.findUnique({
+    where: {
+      id: folderId,
+    },
   })
   return folder
 }
@@ -140,5 +159,7 @@ module.exports = {
   deleteFolder,
   deleteFile,
   updateFolderName,
+  getFolderById,
+  getFilesByFolder,
   
 }

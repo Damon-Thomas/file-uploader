@@ -1,5 +1,7 @@
-// This script is used to update the folder name in the database and on the page
+
 document.addEventListener("DOMContentLoaded", () => {
+
+// This script is used to update the folder name in the database and on the page
   document.querySelectorAll(".folderNameForm").forEach((form) => {
     form.addEventListener("submit", async (event) => {
       console.log("Form submitted");
@@ -31,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-});
+
 
 // This script is used to delete a folder from the database and on the page
 let open = false;
@@ -49,7 +51,7 @@ createFolderButton.addEventListener("click", () => {
 });
 
 // This script is used to delete a folder from the database and on the page
-document.addEventListener("DOMContentLoaded", () => {
+
   document.querySelectorAll(".deleteFolderButton").forEach((button) => {
     button.addEventListener("click", (event) => {
       const folderId = button.getAttribute("data-folder-id");
@@ -93,4 +95,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+
+// Script used to direct to folder page that shows all files in that folder
+  document.querySelectorAll(".folderButton").forEach((folder) => {
+    folder.addEventListener("click", async (event) => {
+      console.log("Folder button clicked", folder);
+
+      const folderId = folder.getAttribute("data-folder-id");
+      window.location.href = `/folder/${folderId}`;
+    });
+  });
+
+
+
 });

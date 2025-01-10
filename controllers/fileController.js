@@ -140,7 +140,30 @@ const deleteFolder = asyncHandler(async (req, res) => {
       console.error('Error deleting folder:', error);
       res.status(500).send('Internal Server Error');
     }
-  });    
+  });   
+  
+const getFolder = asyncHandler(async (req, res) => {
+    try{
+    const user = req.user;
+    const folderId = req.params.id;
+    const folder = await query.getFolderById(parseInt(folderId));
+    const files = await query.getFilesByFolder(user.id, parseInt(folderId));
+    console.log('folder', folder, 'files', files);
+    res.render('folder', { folderName: folder.foldername,files: files, url: req.url });
+    } catch (error) {
+        console.error('Error getting folder:', error);
+        res.status(500).send('Internal Server Error');
+        
+    }
+  });
+
+  const ensureAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+      return next();
+    } else {
+      res.redirect('/login');
+    }
+  };
 
 module.exports = {
     getHome,
@@ -153,4 +176,6 @@ module.exports = {
     postFolderCreation, 
     updateFolderName,
     deleteFolder,
+    getFolder,
+    ensureAuthenticated
 };

@@ -91,8 +91,9 @@ appRouter.post('/login', passport.authenticate('local', {
 appRouter.get('/logout', fileController.logOut)
 appRouter.get('/signup', fileController.getSignup)
 appRouter.post('/signup', fileController.postSignup)
-appRouter.post('/fileupload', upload.single('uploaded_file'), fileController.postFileUpload);
-appRouter.post('/folderCreation', fileController.postFolderCreation);
-appRouter.post('/update-folder/:id', fileController.updateFolderName);
-appRouter.delete('/delete-folder/:id', fileController.deleteFolder);
+appRouter.post('/fileupload', fileController.ensureAuthenticated, upload.single('uploaded_file'), fileController.postFileUpload);
+appRouter.post('/folderCreation', fileController.ensureAuthenticated, fileController.postFolderCreation);
+appRouter.post('/update-folder/:id', fileController.ensureAuthenticated, fileController.updateFolderName);
+appRouter.delete('/delete-folder/:id', fileController.ensureAuthenticated, fileController.deleteFolder);
+appRouter.get('/folder/:id', fileController.ensureAuthenticated, fileController.getFolder)
 module.exports = appRouter
