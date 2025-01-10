@@ -1,15 +1,38 @@
+const { body, validationResult } = require('express-validator');
 const asyncHandler = require("express-async-handler");
 const query = require("../model/queries.js");
-const { validationResult } = require("express-validator");
+const path = require('path');
+const multer = require('multer');
 const bcrypt = require("bcryptjs");
 require('dotenv').config();
-const multer  = require('multer')
-const upload = multer({ dest: './public/data/uploads/' })
-const path = require('path');
 const ejs = require('ejs');
 const passport = require('passport');
 
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './public/data/uploads/');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
 
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type'), false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 * 5 }, // 5MB limit
+  fileFilter: fileFilter
+});
 
 const getHome = asyncHandler(async (req, res) => {  
     if (!req.isAuthenticated()) {
@@ -21,7 +44,7 @@ const getHome = asyncHandler(async (req, res) => {
         console.log('folder', folders);
         console.log('user', req.user, 'userid', req.user.id);
         const folderCreationHtml = await ejs.renderFile(path.join(__dirname, '../views/folderCreation.ejs'));
-        res.render('index', { url: req.url, user: req.user, folders: folders, folderCreationHtml });
+        res.render('index', { url: req.url, user: req.user, folders: folders, folderCreationHtml, errors: null });
         
     }
 });
@@ -40,26 +63,28 @@ const logOut = asyncHandler(async (req, res) => {
       });
 })
 
-const postLogin = asyncHandler(async (req, res) => {
+const postLogin = asyncHandler(async (req, res, next) => {
     console.log('in postLogin');
-    const errors = validationResult(req);
-    
-    if (!errors.isEmpty()) {
-        console.log('errors', errors);
-        res.render('login', { failure: true, url: req.url});
-    }
-    else {
     passport.authenticate('local', function(err, user, info) {
-        if (err) { return errorPage(err); }
-        req.login(user, function(err) {
-            if (err) { 
-            console.log('user', user);
-            res.redirect('/login');}
-        });
-        if (!user) { return res.render('login', { failure: true, url: req.url}); }
-    })(req, res);
-    }
-});
+      console.log('in passport.authenticate');
+      if (err) {
+        console.error('Authentication error:', err);
+        return next(err); // Pass the error to the next middleware
+      }
+      if (!user) {
+        console.log('Authentication failed: user not found');
+        return res.render('login', { failure: true, url: req.url });
+      }
+      req.login(user, function(err) {
+        if (err) {
+          console.error('Login error:', err);
+          return next(err); // Pass the error to the next middleware
+        }
+        console.log('User logged in:', user);
+        return res.redirect('/');
+      });
+    })(req, res, next);
+  });
 
 const getSignup = asyncHandler(async (req, res) => {
     return res.render('signup', {url: req.url, errors: null});
@@ -101,6 +126,13 @@ const postSignup = asyncHandler(async (req, res) => {
 });
 
 const postFileUpload = asyncHandler(async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // There are validation errors
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
     const user = req.user;
     const authorId = user.id;
     const folderId = parseInt(req.body.folderId);
@@ -112,11 +144,16 @@ const postFileUpload = asyncHandler(async (req, res) => {
 });
 
 const postFolderCreation = asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        let folders = await query.getFolders(req.user.id);
+        const folderCreationHtml = await ejs.renderFile(path.join(__dirname, '../views/folderCreation.ejs'));
+        res.render('index', { url: req.url, user: req.user, folders: folders, folderCreationHtml, errors: errors.array() });
+        return;
+    }
     try {
-        console.log('req.body', req.body.inputFileName);
-        console.log('req.user', req.user);
-        let folder = await query.addFolder(req.body.inputFileName, req.user.id);
-        console.log('passed folder', folder);
+        // let folder = await query.addFolder(req.body.inputFileName, req.user.id);
+        await query.addFolder(req.body.inputFileName, req.user.id);
         res.redirect('/');
         
     } catch (error) {
@@ -126,15 +163,23 @@ const postFolderCreation = asyncHandler(async (req, res) => {
 });
 
 const updateFolderName = asyncHandler(async (req, res) => {
+    console.log("IN UPDATE FOLDER")
+    const errors = validationResult(req);
+    console.log("errors", errors);
+    if (!errors.isEmpty()) {
+        let folders = await query.getFolders(req.user.id);
+        const folderCreationHtml = await ejs.renderFile(path.join(__dirname, '../views/folderCreation.ejs'));
+        res.render('index', { url: req.url, user: req.user, folders: folders, folderCreationHtml, errors: errors.array() });
+        return;
+    }
     const folderId = req.params.id;
     const { folderName } = req.body;
-    console.log('folderName', folderName);
-    console.log(req.body)
-    console.log(req.params)
+    
   try {
-    console.log('folderId', folderId, typeof folderId);
+    console.log("FOLDER UPDATING")
     const updatedFolder = await query.updateFolderName(parseInt(folderId), folderName);
     res.json(updatedFolder);
+
   } catch (error) {
     console.error('Error updating folder name:', error);
     res.status(500).send('Internal Server Error');
@@ -212,5 +257,6 @@ module.exports = {
     updateFolderName,
     deleteFolder,
     getFolder,
-    ensureAuthenticated, deleteFile
+    ensureAuthenticated, deleteFile,
+    upload
 };

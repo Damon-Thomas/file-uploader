@@ -11,6 +11,7 @@ const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
 const prisma = require('../model/client.js');
 const { validator, loginValidator } = require("../controllers/validators/signupValidation.js");
+const { fileSanitization, folderSanitization, folderUpdateSanitization } = require("../controllers/validators/fileSanitization.js");
 
 const appRouter = Router()
 
@@ -89,9 +90,9 @@ appRouter.post('/login', fileController.postLogin)
 appRouter.get('/logout', fileController.logOut)
 appRouter.get('/signup', fileController.getSignup)
 appRouter.post('/signup', validator, fileController.postSignup)
-appRouter.post('/fileupload', fileController.ensureAuthenticated, upload.single('uploaded_file'), fileController.postFileUpload);
-appRouter.post('/folderCreation', fileController.ensureAuthenticated, fileController.postFolderCreation);
-appRouter.post('/update-folder/:id', fileController.ensureAuthenticated, fileController.updateFolderName);
+appRouter.post('/fileupload', fileController.ensureAuthenticated, upload.single('uploaded_file'), fileSanitization, fileController.postFileUpload);
+appRouter.post('/folderCreation', fileController.ensureAuthenticated, folderSanitization, fileController.postFolderCreation);
+appRouter.post('/update-folder/:id', fileController.ensureAuthenticated, folderUpdateSanitization, fileController.updateFolderName);
 appRouter.delete('/delete-folder/:id', fileController.ensureAuthenticated, fileController.deleteFolder);
 appRouter.get('/folder/:id', fileController.ensureAuthenticated, fileController.getFolder)
 appRouter.delete('/delete-file/:id', fileController.ensureAuthenticated, fileController.deleteFile)
