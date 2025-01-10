@@ -1,14 +1,18 @@
 <div class="nav">
     
-    <% if (locals.currentUser) { %>
-        <% if (locals.currentUrl != '/') { %>
-            <a href="/admin">Admin</a>
-        <% } %>
+  <% if (locals.currentUser) { %> 
+    <% if (url != '/') { %>
         <a href="/">Home</a>
-        <a href="/logout">Log out</a>
     <% } %>
-    <% if (!locals.currentUser) { %>
-        <a href="/signup">Sign Up</a>
+    <a href="/logout">Log out</a>
+  <% } %> 
+  
+  <% if (!locals.currentUser) { %> 
+    <% if (url != '/login') { %>
         <a href="/login">Log in</a>
-    <% } %>
+    <% } %> 
+    <% if (url != '/signup') { %>
+        <a href="/signup">Sign Up</a>
+    <% } %> 
+  <% } %>
 </div>

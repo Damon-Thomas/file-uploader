@@ -16,9 +16,10 @@ const getHome = asyncHandler(async (req, res) => {
         return res.redirect('/login');
     } else { 
         console.log('authenticated', req.isAuthenticated(), req.user);
-        let folders = await query.getFolders(req.user.userid);
+        let folders = await query.getFolders(req.user.id);
         console.log('url', req.url)
         console.log('folder', folders);
+        console.log('user', req.user, 'userid', req.user.id);
         // modified ai code
         const folderCreationHtml = await ejs.renderFile(path.join(__dirname, '../views/folderCreation.ejs'));
         res.render('index', { currentUrl: req.url, user: req.user, folders: folders, folderCreationHtml });
@@ -28,8 +29,8 @@ const getHome = asyncHandler(async (req, res) => {
 });
 
 const getLogin = asyncHandler(async (req, res) => {
-
-    return res.render('login', {failure: req.query.failure ? true: null, currentUrl: req.query.currentUrl});
+console.log('in getLogin', req.url);
+    return res.render('login', {failure: req.query.failure ? true: null, currentUrl: req.url});
 });
 
 const logOut = asyncHandler(async (req, res) => {
@@ -55,7 +56,7 @@ const postLogin = asyncHandler(async (req, res) => {
 });
 
 const getSignup = asyncHandler(async (req, res) => {
-    return res.render('signup', {errors: null});
+    return res.render('signup', {currentUrl: req.url, errors: null});
 });
 
 const postSignup = asyncHandler(async (req, res) => {

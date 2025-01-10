@@ -9,8 +9,8 @@
 <body>
         <div class="content">
           <h1 class="formTitle">Log In</h1>
-          <%- include('nav') %>
-          <form class="formContainer" action="/login" method="POST">
+          <%- include('nav', {url : currentUrl}) %>
+                    <form class="formContainer" action="/login" method="POST">
             <div class="inputContainer">
               <label class="normalLabel" for="username">Username</label>
               <input class="smallInput" id="username" name="username" placeholder="username" type="text" />
