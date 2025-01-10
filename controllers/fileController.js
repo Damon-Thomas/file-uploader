@@ -94,9 +94,14 @@ const postSignup = asyncHandler(async (req, res) => {
 });
 
 const postFileUpload = asyncHandler(async (req, res) => {
+    const user = req.user;
+    const authorId = user.id;
+    const folderId = parseInt(req.body.folderId);
+    console.log('authorId', authorId, 'user', user);
     console.log('req.body', req.body);
     console.log('req.file', req.file);
-    getHome(req, res);
+    await query.saveFile(req.body.fileName, authorId, 'change to cloud link!', req.file.size, folderId) 
+    res.redirect('/folder/' + req.body.folderId);
 });
 
 const postFolderCreation = asyncHandler(async (req, res) => {
@@ -141,15 +146,26 @@ const deleteFolder = asyncHandler(async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   });   
-  
+
+function formatFileSize(bytes) {
+const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+if (bytes === 0) return '0 Bytes';
+const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
+}
+
 const getFolder = asyncHandler(async (req, res) => {
     try{
     const user = req.user;
     const folderId = req.params.id;
     const folder = await query.getFolderById(parseInt(folderId));
     const files = await query.getFilesByFolder(user.id, parseInt(folderId));
+    const filesHRSize = files.map((file) => {
+        file.size = formatFileSize(file.size);
+        return file;
+    });
     console.log('folder', folder, 'files', files);
-    res.render('folder', { folderName: folder.foldername,files: files, url: req.url });
+    res.render('folder', { folderName: folder.foldername, files: filesHRSize, url: req.url, folderId: folderId});
     } catch (error) {
         console.error('Error getting folder:', error);
         res.status(500).send('Internal Server Error');

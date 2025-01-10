@@ -24,14 +24,18 @@ const createUser = async (username, password) => {
   }
 };
 
-const saveFile = async (filename, authorId, fileContent) => {
+const saveFile = async (filename, authorId, fileLink, size, folderId) => {
     const file = await prisma.file.create({
         data: {
             filename: filename,
-            content: fileContent,
+            size: size,
+            content: fileLink,
             author: {
                 connect: { id: authorId },
-            }
+            },
+            folder: {
+                connect: { id: folderId }, 
+            },
             
         },
     })

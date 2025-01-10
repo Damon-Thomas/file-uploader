@@ -14,6 +14,7 @@
             <div class="form-group">
               <input type="text" class="form-control" placeholder="File Name" name="fileName">
               <input type="file" class="form-control-file" name="uploaded_file">
+              <input type="hidden" name="folderId" value="<%= folderId %>"> <!-- Hidden input for folderId -->
               <input type="submit" value="Save File" class="btn btn-default">
             </div>
         </form>
@@ -23,7 +24,8 @@
         <div class="file">
             <div class="leftContent">
                 <p class="fileInnerName"><%= files[i].filename %></p>
-                <!-- <p class="fileInnerUpDate"><%= files[i].creationDate %></p> -->
+                <p class="fileInnerSize"><%= files[i].size %></p>
+                <p class="fileInnerUpDate"><%= new Date(files[i].createdAt).toLocaleString() %></p>
             </div>
             <div class="rightContent">
                 <button class="deleteFileButton svgButton" data-file-id="<%= files[i].id %>">
