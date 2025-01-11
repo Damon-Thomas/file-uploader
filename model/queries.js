@@ -25,6 +25,7 @@ const createUser = async (username, password) => {
 };
 
 const saveFile = async (filename, authorId, fileLink, size, folderId) => {
+  console.log('in saveFile', 'shareLink Final:', fileLink);
     const file = await prisma.file.create({
         data: {
             filename: filename,

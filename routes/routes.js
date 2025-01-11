@@ -4,7 +4,6 @@ const expressSession = require('express-session');
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const { PrismaClient } = require('@prisma/client') 
 const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
 const fileController = require('../controllers/fileController.js')
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -13,7 +12,13 @@ const prisma = require('../model/client.js');
 const { validator, loginValidator } = require("../controllers/validators/signupValidation.js");
 const { fileSanitization, folderSanitization, folderUpdateSanitization } = require("../controllers/validators/fileSanitization.js");
 
+
+
 const appRouter = Router()
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage: storage,
+});
 
 appRouter.use(bodyParser.urlencoded({ extended: true }));
 appRouter.use(
@@ -90,7 +95,8 @@ appRouter.post('/login', fileController.postLogin)
 appRouter.get('/logout', fileController.logOut)
 appRouter.get('/signup', fileController.getSignup)
 appRouter.post('/signup', validator, fileController.postSignup)
-appRouter.post('/fileupload', fileController.ensureAuthenticated, upload.single('uploaded_file'), fileSanitization, fileController.handleFileUpload);
+// appRouter.post('/fileupload', fileController.ensureAuthenticated, upload.single('uploaded_file'), fileSanitization, fileController.handleFileUpload);
+appRouter.post('/fileupload', upload.single('uploaded_file'),fileController.handleFileUpload);
 appRouter.post('/folderCreation', fileController.ensureAuthenticated, folderSanitization, fileController.postFolderCreation);
 appRouter.post('/update-folder/:id', fileController.ensureAuthenticated, folderUpdateSanitization, fileController.updateFolderName);
 appRouter.delete('/delete-folder/:id', fileController.ensureAuthenticated, fileController.deleteFolder);
