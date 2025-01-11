@@ -90,7 +90,7 @@ appRouter.post('/login', fileController.postLogin)
 appRouter.get('/logout', fileController.logOut)
 appRouter.get('/signup', fileController.getSignup)
 appRouter.post('/signup', validator, fileController.postSignup)
-appRouter.post('/fileupload', fileController.ensureAuthenticated, upload.single('uploaded_file'), fileSanitization, fileController.postFileUpload);
+appRouter.post('/fileupload', fileController.ensureAuthenticated, upload.single('uploaded_file'), fileSanitization, fileController.handleFileUpload);
 appRouter.post('/folderCreation', fileController.ensureAuthenticated, folderSanitization, fileController.postFolderCreation);
 appRouter.post('/update-folder/:id', fileController.ensureAuthenticated, folderUpdateSanitization, fileController.updateFolderName);
 appRouter.delete('/delete-folder/:id', fileController.ensureAuthenticated, fileController.deleteFolder);

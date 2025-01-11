@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 require('dotenv').config();
 const ejs = require('ejs');
 const passport = require('passport');
+const { uploadFile, getFileUrl } = require('../model/supabase');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -138,8 +139,9 @@ const postFileUpload = asyncHandler(async (req, res) => {
     const folderId = parseInt(req.body.folderId);
     console.log('authorId', authorId, 'user', user);
     console.log('req.body', req.body);
-    console.log('req.file', req.file);
-    await query.saveFile(req.body.fileName, authorId, 'change to cloud link!', req.file.size, folderId) 
+    console.log('req.file', req.file, 'req.file.path', req.file.path);
+    await uploadFile(req.file.path, req.file);
+    // await query.saveFile(req.body.fileName, authorId, 'change to cloud link!', req.file.size, folderId) 
     res.redirect('/folder/' + req.body.folderId);
 });
 
@@ -245,6 +247,23 @@ const getFolder = asyncHandler(async (req, res) => {
     }
   });
 
+async function handleFileUpload(req, res) {
+  const file = req.file; // Assuming you're using multer to handle file uploads
+  const filePath = `uploads/${file.originalname}`;
+
+  const uploadResult = await uploadFile(filePath, file.buffer);
+  if (!uploadResult) {
+    return res.status(500).json({ error: 'Failed to upload file' });
+  }
+
+  const fileUrl = await getFileUrl(filePath);
+  if (!fileUrl) {
+    return res.status(500).json({ error: 'Failed to get file URL' });
+  }
+  console.log('File uploaded:', fileUrl);
+  res.json({ fileUrl });
+}
+
 module.exports = {
     getHome,
     getLogin,
@@ -258,5 +277,6 @@ module.exports = {
     deleteFolder,
     getFolder,
     ensureAuthenticated, deleteFile,
+    handleFileUpload,
     upload
 };
