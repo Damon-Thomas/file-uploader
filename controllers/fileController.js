@@ -15,17 +15,6 @@ const {
 } = require("../model/supabase");
 const { post } = require("../routes/routes.js");
 
-//Configure multer for file uploads
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, './public/data/uploads/');
-//   },
-//   filename: (req, file, cb) => {
-//     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-//     cb(null, uniqueSuffix + path.extname(file.originalname));
-//   }
-// });
-
 const getHome = asyncHandler(async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.redirect("/login");
@@ -214,6 +203,14 @@ const deleteFolder = asyncHandler(async (req, res) => {
   const folderId = req.params.id;
   console.log("in controller", folderId);
   try {
+    //delete all storage files in folder
+    const files = await query.getFilesByFolder(req.user.id, parseInt(folderId));
+    files.forEach((file) => {
+      console.log("deleting file", file);
+      deleteStorageFile(file.filePath);
+    });
+
+    //delete folder and its files from db
     await query.deleteFolder(parseInt(folderId));
 
     res.json({ message: "Folder deleted successfully" });
@@ -284,10 +281,11 @@ const deleteFile = asyncHandler(async (req, res) => {
 });
 
 async function handleFileUpload(req, res) {
+  console.log("in handleFileUpload", req.file);
   const user = req.user;
   const buffer = req.file.buffer;
   const fileContentType = req.file.mimetype;
-  const filePath = `uploads/${user.id}/${req.file.originalname}`;
+  const filePath = `uploads/${user.id}/${Date.now()}/${req.file.originalname}`;
   const uploadResult = await uploadFile(filePath, buffer, fileContentType);
   if (!uploadResult) {
     return res.status(500).json({ error: "Failed to upload file" });
