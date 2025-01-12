@@ -20,6 +20,7 @@ model file {
   content   String   @db.VarChar(255)
   size      Int
   createdAt DateTime @default(now())
+  filePath  String   @db.VarChar(255)
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
   folder    Folder   @relation(fields: [folderId], references: [id])

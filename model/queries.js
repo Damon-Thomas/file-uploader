@@ -24,13 +24,14 @@ const createUser = async (username, password) => {
   }
 };
 
-const saveFile = async (filename, authorId, fileLink, size, folderId) => {
+const saveFile = async (filename, authorId, fileLink, size, folderId, filePath) => {
   console.log('in saveFile', 'shareLink Final:', fileLink);
     const file = await prisma.file.create({
         data: {
             filename: filename,
             size: size,
             content: fileLink,
+            filePath: filePath,
             author: {
                 connect: { id: authorId },
             },
@@ -44,11 +45,16 @@ const saveFile = async (filename, authorId, fileLink, size, folderId) => {
 }
 
 const deleteFile = async (fileId) => {
+  try {
     await prisma.file.delete({
         where: {
             id: fileId,
         },
     })
+  }
+  catch (error) {
+    console.error('Error deleting file:', error)
+  }
 }
 
 const getFiles = async (userid) => {
@@ -104,6 +110,14 @@ const getFolderById = async (folderId) => {
   })
   return folder
 }
+
+const getFileById = async (fileId) => {
+  const file = await prisma.file.findUnique({
+    where: {
+      id: fileId,
+    },
+  })
+  return file}
 
   const editFolder = async (folderId, foldername) => {
     await prisma.folder.update({
@@ -166,5 +180,6 @@ module.exports = {
   updateFolderName,
   getFolderById,
   getFilesByFolder,
+  getFileById,
   
 }

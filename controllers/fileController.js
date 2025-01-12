@@ -9,9 +9,9 @@ const ejs = require("ejs");
 const passport = require("passport");
 const {
   uploadFile,
-  getFileUrl,
   downloadFile,
   getShareableLink,
+  deleteStorageFile,
 } = require("../model/supabase");
 const { post } = require("../routes/routes.js");
 
@@ -25,7 +25,6 @@ const { post } = require("../routes/routes.js");
 //     cb(null, uniqueSuffix + path.extname(file.originalname));
 //   }
 // });
-
 
 const getHome = asyncHandler(async (req, res) => {
   if (!req.isAuthenticated()) {
@@ -145,7 +144,8 @@ const postFileUpload = asyncHandler(async (req, res, shareLink, filePath) => {
     authorId,
     shareLink,
     req.file.size,
-    folderId
+    folderId,
+    filePath
   );
   res.redirect("/folder/" + req.body.folderId);
 });
@@ -262,10 +262,20 @@ const ensureAuthenticated = (req, res, next) => {
 };
 
 const deleteFile = asyncHandler(async (req, res) => {
+  console.log("in deleteFile AAAAA");
+  console.log(req.body, req.url);
+  console.log('params', req.params);
+  console.log('id', req.params.id);
   const fileId = req.params.id;
-  console.log("deleting file", fileId);
+  console.log('file id', fileId);
   try {
+    const file = await query.getFileById(parseInt(fileId));
+    console.log("file", file);
+    const filePath = file.filePath;
+    console.log("deleting file", filePath);
+    deleteStorageFile(filePath);
     await query.deleteFile(parseInt(fileId));
+    
     res.json({ message: "File deleted successfully" });
   } catch (error) {
     console.error("Error deleting file:", error);
@@ -307,6 +317,4 @@ module.exports = {
   ensureAuthenticated,
   deleteFile,
   handleFileUpload,
-  
-  
 };

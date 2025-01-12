@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error('Error initializing form validation:', error);
   }
 
-  // Existing code for delete file functionality
+  
   document.querySelectorAll(".deleteFileButton").forEach((button) => {
     button.addEventListener("click", (event) => {
       const fileId = button.getAttribute("data-file-id");

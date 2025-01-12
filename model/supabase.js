@@ -10,14 +10,14 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 const uploadFile = async (filePath, buffer, fileContentType) => {
   const { data, error } = await supabase.storage
     .from("files")
-    .upload(filePath, buffer, {contentType: fileContentType});
+    .upload(filePath, buffer, { contentType: fileContentType });
 
   if (error) {
     console.error("Error uploading file:", error);
-    return null
+    return null;
   } else {
     console.log("File uploaded successfully:", data);
-    return true
+    return true;
   }
 };
 
@@ -29,15 +29,13 @@ const downloadFile = async (path) => {
   } else {
     const url = URL.createObjectURL(data);
     console.log("File downloaded successfully:", url);
-    return url
+    return url;
     // You can use the URL to display or download the file
   }
 };
 
 const getShareableLink = (filePath) => {
-  const { data, error } = supabase.storage
-    .from("files")
-    .getPublicUrl(filePath);
+  const { data, error } = supabase.storage.from("files").getPublicUrl(filePath);
 
   if (error) {
     console.error("Error getting public URL:", error);
@@ -49,8 +47,16 @@ const getShareableLink = (filePath) => {
   }
 };
 // Example usage
-
-
+const deleteStorageFile = async (filePath) => {
+  const { data, error } = await supabase.storage
+    .from("files")
+    .remove([filePath]);
+  if (error) {
+    console.error("Error deleting file:", error);
+  } else {
+    console.log("File deleted successfully:", data);
+  }
+};
 
 // async function uploadFile(filePath, file) {
 //   const { data, error } = await supabase.storage
@@ -80,4 +86,5 @@ module.exports = {
   uploadFile,
   downloadFile,
   getShareableLink,
+  deleteStorageFile,
 };
