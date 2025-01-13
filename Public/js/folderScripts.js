@@ -1,18 +1,28 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM loaded");
   try {
-    const fileUploadForm = document.getElementById('fileUploadForm');
-    const fileNameInput = document.getElementById('fileName');
-    const fileInput = document.getElementById('uploaded_file');
-    const fileUpError = document.getElementById('fileUpError');
-    console.log('fileUploadForm', fileUploadForm, 'fileNameInput', fileNameInput, 'fileInput', fileInput, 'fileUpError', fileUpError);
+    const fileUploadForm = document.getElementById("fileUploadForm");
+    const fileNameInput = document.getElementById("fileName");
+    const fileInput = document.getElementById("uploaded_file");
+    const fileUpError = document.getElementById("fileUpError");
+    console.log(
+      "fileUploadForm",
+      fileUploadForm,
+      "fileNameInput",
+      fileNameInput,
+      "fileInput",
+      fileInput,
+      "fileUpError",
+      fileUpError
+    );
     if (!fileUploadForm || !fileNameInput || !fileInput || !fileUpError) {
-      throw new Error('One or more elements not found');
+      throw new Error("One or more elements not found");
     }
 
-    console.log('JS LOADED');
-    fileUploadForm.addEventListener('submit', (event) => {
-      console.log('file submitted AAA');
+    console.log("JS LOADED");
+    fileUploadForm.addEventListener("submit", (event) => {
+      console.log("file submitted AAA");
       let hasError = false;
 
       if (!fileNameInput.value.trim()) {
@@ -24,19 +34,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (hasError) {
-        console.log('hasError', hasError);
+        console.log("hasError", hasError);
         event.preventDefault();
-        fileUpError.style.display = 'block';
+        fileUpError.style.display = "block";
       } else {
-        console.log('no error');
-        fileUpError.style.display = 'none';
+        console.log("no error");
+        fileUpError.style.display = "none";
       }
     });
   } catch (error) {
-    console.error('Error initializing form validation:', error);
+    console.error("Error initializing form validation:", error);
   }
 
-  
   document.querySelectorAll(".deleteFileButton").forEach((button) => {
     button.addEventListener("click", (event) => {
       const fileId = button.getAttribute("data-file-id");
@@ -80,4 +89,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  // Example usage of FileSaver
+  document.querySelectorAll(".downloadButton").forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      console.log("File Save js in")
+      const fileLink = button.getAttribute("data-file-link"); 
+      const fileName = button.getAttribute("data-file-name");
+      try {
+        saveAs(fileLink, fileName);
+      } catch (error) {
+        console.error("Error downloading file:", error);
+      };
+  })});
 });
