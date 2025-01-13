@@ -1,17 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM loaded");
   try {
     const fileUploadForm = document.getElementById('fileUploadForm');
     const fileNameInput = document.getElementById('fileName');
-    const fileInput = document.getElementById('uploadedFile');
+    const fileInput = document.getElementById('uploaded_file');
     const fileUpError = document.getElementById('fileUpError');
-
+    console.log('fileUploadForm', fileUploadForm, 'fileNameInput', fileNameInput, 'fileInput', fileInput, 'fileUpError', fileUpError);
     if (!fileUploadForm || !fileNameInput || !fileInput || !fileUpError) {
       throw new Error('One or more elements not found');
     }
 
     console.log('JS LOADED');
     fileUploadForm.addEventListener('submit', (event) => {
-      console.log('file submitted');
+      console.log('file submitted AAA');
       let hasError = false;
 
       if (!fileNameInput.value.trim()) {

@@ -4,7 +4,12 @@ const { body } = require("express-validator");
 
 const fileSanitization = [
 body('fileName').trim().isLength({ min: 1 }).withMessage('File name is required').escape(),
-
+body('file').custom((value, { req }) => {
+    if (!req.file) {
+        throw new Error('File is required');
+    }
+    return true;
+})
 ];
 
 const folderSanitization = [

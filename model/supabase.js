@@ -58,29 +58,6 @@ const deleteStorageFile = async (filePath) => {
   }
 };
 
-// async function uploadFile(filePath, file) {
-//   const { data, error } = await supabase.storage
-//     .from("files")
-//     .upload(filePath, file);
-//   if (error) {
-//     console.error("Error uploading file:", error);
-//     return null;
-//   } else {
-//     console.log("File uploaded successfully:", data);
-//     return data;
-//   }
-// }
-
-// async function getFileUrl(filePath) {
-//   const { data, error } = supabase.storage.from("files").getPublicUrl(filePath);
-//   if (error) {
-//     console.error("Error getting file URL:", error);
-//     return null;
-//   } else {
-//     console.log("File public URL:", data.publicUrl);
-//     return data.publicUrl;
-//   }
-// }
 
 module.exports = {
   uploadFile,

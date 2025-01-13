@@ -19,11 +19,7 @@ const getHome = asyncHandler(async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.redirect("/login");
   } else {
-    console.log("authenticated", req.isAuthenticated(), req.user);
     let folders = await query.getFolders(req.user.id);
-    console.log("url", req.url);
-    console.log("folder", folders);
-    console.log("user", req.user, "userid", req.user.id);
     const folderCreationHtml = await ejs.renderFile(
       path.join(__dirname, "../views/folderCreation.ejs")
     );
@@ -56,7 +52,7 @@ const logOut = asyncHandler(async (req, res) => {
 const postLogin = asyncHandler(async (req, res, next) => {
   console.log("in postLogin");
   passport.authenticate("local", function (err, user, info) {
-    console.log("in passport.authenticate");
+    
     if (err) {
       console.error("Authentication error:", err);
       return next(err); // Pass the error to the next middleware
@@ -115,11 +111,7 @@ const postSignup = asyncHandler(async (req, res) => {
 
 const postFileUpload = asyncHandler(async (req, res, shareLink, filePath) => {
   console.log("in postFileUpload");
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    // There are validation errors
-    return res.status(400).json({ errors: errors.array() });
-  }
+ 
 
   const user = req.user;
   const authorId = user.id;
@@ -201,12 +193,12 @@ const updateFolderName = asyncHandler(async (req, res) => {
 
 const deleteFolder = asyncHandler(async (req, res) => {
   const folderId = req.params.id;
-  console.log("in controller", folderId);
+  
   try {
     //delete all storage files in folder
     const files = await query.getFilesByFolder(req.user.id, parseInt(folderId));
     files.forEach((file) => {
-      console.log("deleting file", file);
+      
       deleteStorageFile(file.filePath);
     });
 
@@ -228,21 +220,24 @@ function formatFileSize(bytes) {
 }
 
 const getFolder = asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    console.log('errors', errors)
   try {
     const user = req.user;
-    const folderId = req.params.id;
+    const folderId = req.params.id || req.body.folderId;
     const folder = await query.getFolderById(parseInt(folderId));
     const files = await query.getFilesByFolder(user.id, parseInt(folderId));
     const filesHRSize = files.map((file) => {
       file.size = formatFileSize(file.size);
       return file;
     });
-    console.log("folder", folder, "files", files);
+    console.log("folder", folder, "files", files, errors);
     res.render("folder", {
       folderName: folder.foldername,
       files: filesHRSize,
       url: req.url,
       folderId: folderId,
+      errors: errors.array(),
     });
   } catch (error) {
     console.error("Error getting folder:", error);
@@ -281,7 +276,15 @@ const deleteFile = asyncHandler(async (req, res) => {
 });
 
 async function handleFileUpload(req, res) {
-  console.log("in handleFileUpload", req.file);
+  console.log("in handleFileUpload", req.file, req.body);
+
+  const errors = validationResult(req);
+  console.log('errors', errors)
+  if (!errors.isEmpty()) {
+    // There are validation errors
+    
+    return getFolder(req, res);
+    };
   const user = req.user;
   const buffer = req.file.buffer;
   const fileContentType = req.file.mimetype;

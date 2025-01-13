@@ -14,10 +14,13 @@
         <form id="fileUploadForm" action="/fileupload" enctype="multipart/form-data" method="post">
             <div class="form-group">
               <input type="text" class="form-control" placeholder="File Name" name="fileName" id="fileName">
+              <%- include('formError', {selector: 'fileName', errors: errors}) %>
               <input type="file" class="form-control-file" name="uploaded_file" id="uploaded_file">
+              <%- include('formError', {selector: 'file', errors: errors}) %>
               <input type="hidden" name="folderId" value="<%= folderId %>"> <!-- Hidden input for folderId -->
               <input type="submit" value="Save File" class="btn btn-default">
               <p class="error fileUpError" id="fileUpError" style="display: none;">Please Add a File Name and Attach a File</p>
+             
             </div>
         </form>
     </div>
