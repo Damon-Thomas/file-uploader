@@ -1,0 +1,17 @@
+<div class="headSection">
+    <h1 class="title">File Uploader</h1>
+    <div class="subHead">
+      <div class="header">
+        <% if (locals.currentUser) { %>
+          <h2 class="welcomeMessage">Welcome, <%= locals.currentUser.username %></h2>
+        <% } %>
+        <% if (url == '/login') { %>
+            <h2 class="welcomeMessage">Welcome, Log In Below</h2>
+        <% } %> 
+        <% if (url == '/signup') { %>
+            <h2 class="welcomeMessage">Welcome, Sign Up Below %></h2>
+        <% } %> 
+      </div>
+      <%- include('nav', {url : url}) %>
+    </div>
+  </div>

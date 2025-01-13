@@ -1,0 +1,38 @@
+:root{
+    /* color scheme */
+    /* --darkest: #143109;
+    --sage: #AAAE7F;
+    --beige: #D0D6B3;
+    --white: #F7F7F7;
+    --offWhite: #EFEFEF; */
+
+    --subTitleSize: calc(.75em + 1.5vw);
+    --headerBottomPadding: calc(1em + 1.5vw);
+    --titleSize: calc(1.5rem + 2vw);
+
+}
+
+.headSection{
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+    padding-bottom: var(--headerBottomPadding);
+}
+
+.subHead{
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+.title{
+ font-size: var(--titleSize);
+ font-weight: 800;
+ color: var(--darkest);
+}
+
+.welcomeMessage, .nav{
+    font-size: var(--subTitleSize);
+    font-weight: 500;
+    color: var(--darkest);
+}

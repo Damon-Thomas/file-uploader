@@ -18,3 +18,23 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
+:root{
+	/* color scheme */
+    --darkest: #143109;
+    --sage: #AAAE7F;
+    --beige: #D0D6B3;
+    --white: #F7F7F7;
+    --offWhite: #EFEFEF;
+	--pagePadding: calc(1em + 2vw);
+}
+
+body{
+    padding: var(--pagePadding);
+    background-color: var(--offWhite);
+}
+
+a{
+    text-decoration: none;
+    color: var(--sage);
+}

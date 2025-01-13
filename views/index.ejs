@@ -4,18 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/general.css">
+    <link rel="stylesheet" href="./css/header.css">
     <link rel="stylesheet" href="./css/homeStyles.css">
     <title>File Uploader</title>
 </head>
 <body>
-    <h1>File Uploader</h1>
-    <%- include('nav', {url : url}) %>
-    <div class="header">
-      <% if (locals.currentUser) { %>
-        <h2>Welcome, <%= locals.currentUser.username %></h2>
-      <% } %>
-    </div>
-
+    <%- include('header', {url : url}) %>
     <div class="fileCabinet">
       <% for(let i = 0; i < folders.length; i++) { %>
         <div class="folder">

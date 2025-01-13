@@ -2,13 +2,30 @@
 
 
 :root{
+    /* color scheme */
+    /* --darkest: #143109;
+    --sage: #AAAE7F;
+    --beige: #D0D6B3;
+    --white: #F7F7F7;
+    --offWhite: #EFEFEF; */
+
     --folderGap: calc(10px + .25vh);
     --folderInnerGap: calc(15px + .25vw);
     --folderBackground: #f5f5f5;
     --deleteHeight: calc(25px + .5vw);
     --folderPadding: calc(10px + .5vw);
     --folderPaddingHeight: calc(5px + .25vh);
+    
 }
+
+
+
+
+
+
+
+
+
 
 .folder{
     display: flex;
