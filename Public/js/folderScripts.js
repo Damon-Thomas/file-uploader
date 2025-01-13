@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Example usage of FileSaver
+  //download file
   document.querySelectorAll(".downloadButton").forEach((button) => {
     button.addEventListener("click", async (event) => {
       console.log("File Save js in")
@@ -102,4 +102,24 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Error downloading file:", error);
       };
   })});
+
+  // Copy link to clipboard
+  document.querySelectorAll(".copyLinkButton").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      
+      const fileLink = button.getAttribute("data-file-link");
+      const fileId = button.getAttribute("data-file-id")
+      const message = document.querySelector(`.hiddenNotice[data-file-id="${fileId}"]`)
+      console.log('Message!!!', message)
+      message.style.display = "block";
+      
+      navigator.clipboard.writeText(fileLink).then(() => {
+        console.log("Link copied to clipboard:", fileLink);
+      }).catch((error) => {
+        console.error("Error copying link to clipboard:", error);
+      });
+    });
+  });
+
+  
 });
