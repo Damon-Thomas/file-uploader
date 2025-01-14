@@ -26,10 +26,14 @@ time, mark, audio, video {
     --beige: #D0D6B3;
     --white: #F7F7F7;
     --offWhite: #EFEFEF;
+	--red: #B4656F;
+
 	--pagePadding: calc(1em + 2vw);
 }
 
 body{
+	/* width: 100vw; */
+	width: calc(100vw - (--pagePadding * 2));
     padding: var(--pagePadding);
     background-color: var(--offWhite);
 }
@@ -37,4 +41,9 @@ body{
 a{
     text-decoration: none;
     color: var(--sage);
+}
+
+input {
+    background: transparent;
+    border: none;
 }

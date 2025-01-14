@@ -221,7 +221,7 @@ function formatFileSize(bytes) {
 
 const getFolder = asyncHandler(async (req, res) => {
     const errors = validationResult(req);
-    console.log('errors', errors)
+    
   try {
     const user = req.user;
     const folderId = req.params.id || req.body.folderId;
@@ -231,7 +231,7 @@ const getFolder = asyncHandler(async (req, res) => {
       file.size = formatFileSize(file.size);
       return file;
     });
-    console.log("folder", folder, "files", files, errors);
+    
     res.render("folder", {
       folderName: folder.foldername,
       files: filesHRSize,
@@ -254,17 +254,14 @@ const ensureAuthenticated = (req, res, next) => {
 };
 
 const deleteFile = asyncHandler(async (req, res) => {
-  console.log("in deleteFile AAAAA");
-  console.log(req.body, req.url);
-  console.log('params', req.params);
-  console.log('id', req.params.id);
+ 
   const fileId = req.params.id;
-  console.log('file id', fileId);
+
   try {
     const file = await query.getFileById(parseInt(fileId));
-    console.log("file", file);
+    
     const filePath = file.filePath;
-    console.log("deleting file", filePath);
+    
     deleteStorageFile(filePath);
     await query.deleteFile(parseInt(fileId));
     
@@ -276,10 +273,10 @@ const deleteFile = asyncHandler(async (req, res) => {
 });
 
 async function handleFileUpload(req, res) {
-  console.log("in handleFileUpload", req.file, req.body);
+  
 
   const errors = validationResult(req);
-  console.log('errors', errors)
+  
   if (!errors.isEmpty()) {
     // There are validation errors
     
@@ -297,9 +294,7 @@ async function handleFileUpload(req, res) {
   if (!fileUrl) {
     return res.status(500).json({ error: "Failed to get file URL" });
   }
-  console.log("File uploaded:", fileUrl);
   const shareLink = getShareableLink(filePath);
-  console.log("Shareable link:", shareLink);
   postFileUpload(req, res, shareLink, filePath);
 }
 

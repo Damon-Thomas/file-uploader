@@ -1,16 +1,16 @@
-
 document.addEventListener("DOMContentLoaded", () => {
 
 // This script is used to update the folder name in the database and on the page
   document.querySelectorAll(".folderNameForm").forEach((form) => {
     form.addEventListener("submit", async (event) => {
+      event.stopPropagation(); // Stop propagation here
       console.log("Form submitted");
       event.preventDefault();
       const folderId = form.getAttribute("data-folder-id");
       const folderName = form.folderName.value;
 
       try {
-        console.log("Updating folder name:", folderName);
+        
         const response = await fetch(`/update-folder/${folderId}`, {
           method: "POST",
           headers: {
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
-// This script is used to delete a folder from the database and on the page
+// This script is used to open form to add a folder to the database and on the page
 let open = false;
 const createFolderButton = document.querySelector(".createFolderButton");
 const htmlLocation = document.querySelector(".insertedFolderForm");
@@ -54,8 +54,9 @@ createFolderButton.addEventListener("click", () => {
 
   document.querySelectorAll(".deleteFolderButton").forEach((button) => {
     button.addEventListener("click", (event) => {
+      event.stopPropagation(); // Stop propagation here
       const folderId = button.getAttribute("data-folder-id");
-      const confirmDelete = button.nextElementSibling;
+      const confirmDelete = button.previousElementSibling;
       button.style.display = "none";
       confirmDelete.style.display = "block";
     });
@@ -63,8 +64,9 @@ createFolderButton.addEventListener("click", () => {
 
   document.querySelectorAll(".confirmCancel").forEach((button) => {
     button.addEventListener("click", (event) => {
-      const confirmDelete = button.parentElement;
-      const deleteButton = confirmDelete.previousElementSibling;
+      event.stopPropagation(); // Stop propagation here
+      const confirmDelete = button.parentElement.parentElement.parentElement;
+      const deleteButton = confirmDelete.nextElementSibling;
       confirmDelete.style.display = "none";
       deleteButton.style.display = "block";
     });
@@ -72,7 +74,7 @@ createFolderButton.addEventListener("click", () => {
 
   document.querySelectorAll(".confirmYes").forEach((button) => {
     button.addEventListener("click", async (event) => {
-      console.log("confirm delete fires on click");
+      event.stopPropagation(); // Stop propagation here
       const folderId = button.getAttribute("data-folder-id");
       try {
         const response = await fetch(`/delete-folder/${folderId}`, {
@@ -98,15 +100,22 @@ createFolderButton.addEventListener("click", () => {
 
 
 // Script used to direct to folder page that shows all files in that folder
-  document.querySelectorAll(".folderButton").forEach((folder) => {
+  document.querySelectorAll(".folder").forEach((folder) => {
     folder.addEventListener("click", async (event) => {
-      console.log("Folder button clicked", folder);
+      event.stopPropagation(); // Stop propagation here
 
       const folderId = folder.getAttribute("data-folder-id");
       window.location.href = `/folder/${folderId}`;
     });
   });
 
+ document.querySelectorAll(".folderName").forEach((input) => {
+  console.log('input', input)
+   input.addEventListener("click", async (event) => {
+    
+    event.stopPropagation()
+   })
+ })
 
 
 });
