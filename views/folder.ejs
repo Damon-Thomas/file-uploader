@@ -15,6 +15,9 @@
 
     <div class="fileUploadContainer">
       <h4 class="fileUpload">Upload a File:</h4>
+      <p class="error fileUpError" id="fileUpError" style="visibility: hidden">
+        Please Add a File Name and Attach a File
+      </p>
       <form
         class="fileUploadForm fullWidth"
         id="fileUploadForm"
@@ -48,10 +51,9 @@
             <input type="submit" value="Save File" class="btn btn-default submit-file" />
             <li class="formError noBullet"></li>
         </div>
-        <p class="error fileUpError" id="fileUpError" style="display: none">
-          Please Add a File Name and Attach a File
-        </p>
+        
       </form>
+      
     </div>
 
     <div class="fileCabinet">

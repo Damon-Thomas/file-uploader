@@ -35,10 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (hasError) {
         console.log("hasError", hasError);
         event.preventDefault();
-        fileUpError.style.display = "block";
+        fileUpError.style.visibility = "visible";
       } else {
         console.log("no error");
-        fileUpError.style.display = "none";
+        fileUpError.style.visibility = "hidden";
       }
     });
   } catch (error) {

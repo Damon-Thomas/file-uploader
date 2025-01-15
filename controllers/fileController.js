@@ -110,7 +110,7 @@ const postSignup = asyncHandler(async (req, res) => {
 });
 
 const postFileUpload = asyncHandler(async (req, res, shareLink, filePath) => {
-  console.log("in postFileUpload");
+  
  
 
   const user = req.user;
