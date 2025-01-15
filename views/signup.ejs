@@ -5,15 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./css/general.css">
     <link rel="stylesheet" href="./css/header.css">
-    <link rel="stylesheet" href="./css/messageForm.css">
+    <link rel="stylesheet" href="./css/loginStyles.css">
     <title>Sign Up</title>
   </head>
 
   <body>
     <%- include('header', {url : url}) %>
     <div class="content">
-      <h1 class="formTitle">Sign Up Here</h1>
-      <%- include('nav', {url : url}) %>      
+      <h1 class="formTitle fullWidth ">Sign Up Here</h1>    
         <form class="formContainer" action="/signup" method="POST" class="signUpForm">
             <div class="inputContainer">
               <label class="normalLabel" for="userName">Username:</label
