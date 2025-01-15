@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/general.css">
+    <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/folderStyles.css">
     <title><%= folderName %></title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
-    <h2><%= folderName %></h2>
-    <%- include('nav', {url : url}) %>
+    <%- include('header', {url : url}) %>
+    <h2 class="folderTitle"><%= folderName %></h2>
+    
     <div class="fileUploadContainer">
         <h4 class="fileUpload">Upload a File:</h4>
         <form id="fileUploadForm" action="/fileupload" enctype="multipart/form-data" method="post">

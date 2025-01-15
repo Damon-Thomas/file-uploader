@@ -38,3 +38,8 @@
     font-weight: 500;
     color: var(--darkest);
 }
+
+.nav{
+    display: flex;
+    gap: 1em;
+}

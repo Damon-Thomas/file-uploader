@@ -1,8 +1,13 @@
 <li class="formError noBullet">
-    <% if (errors) {%>
+    <% if (errors == "Username already exists" && selector == "userName") { %>
+        <%console.log('in 2nd if', errors) %>
+        <%= errors %>
+
+    <%} %>
+    <% if (errors && Array.isArray(errors)) {%>
         
         <% errors.forEach(function(error) { %>
-          
+            
           <%if (error.path == selector) { %>
               
               <%= error.msg %>
@@ -11,4 +16,9 @@
         <% }); %>
       
     <% } %>
+    <% console.log(errors, selector) %>
+    <% console.log('if should be true', errors === "Username already exists") %>
+    
+    
+    
  </li>

@@ -98,8 +98,8 @@ const postSignup = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     if (error.message === "Username already exists") {
-      console.log("errors", error);
-      res.render("signup", { errors: [{ msg: error.message }] });
+      console.log("errors HHH", error.message);
+      res.render("signup", { url: req.url, errors: error.message });
     } else {
       console.error("Error creating user:", error);
       res.status(500).send("Internal Server Error");

@@ -108,3 +108,24 @@
     color: var(--red);
     font-weight: bold;
 }
+
+.infoWrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 1em;
+    gap: .25em;
+    
+}
+.infoInnerWrapper{
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info{
+    font-size: medium;
+    font-weight: bold;
+    color: var(--darkest);
+}
