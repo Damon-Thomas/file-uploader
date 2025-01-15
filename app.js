@@ -1,4 +1,3 @@
-
 const express = require("express");
 const app = express();
 const path = require("node:path");
@@ -8,6 +7,9 @@ const appRouter = require("./routes/routes.js");
 
 const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
+
+// Serve static files
+app.use(express.static(path.join(__dirname, 'Public')));
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
