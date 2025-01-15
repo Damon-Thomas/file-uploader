@@ -1,11 +1,11 @@
 :root {
   /* color scheme */
-  /* --darkest: #143109;
-    --sage: #AAAE7F;
-    --beige: #D0D6B3;
-    --white: #F7F7F7;
-    --offWhite: #EFEFEF; 
-    --red: #B4656F*/
+  --darkest: #143109;
+  --sage: #AAAE7F;
+  --beige: #D0D6B3;
+  --white: #F7F7F7;
+  --offWhite: #EFEFEF; 
+  --red: #B4656F;
 
   --folderGap: calc(10px + 0.25vh);
   --folderInnerGap: calc(15px + 0.25vw);
@@ -18,7 +18,121 @@
   --deleteP: calc(.5em + 1vw);
   --deleteButtonGap: calc(.25em + 1vw);
   --deleteVertGap: calc(.25em + .5vw);
-  --createFolderBottomPad: calc(.5em + 2vh)
+  --createFolderBottomPad: calc(.5em + 2vh);
+  --hoverColor: #D0D6B3; /* Beige color */;
+  --formCreatePadding: calc(.1em + 1vw);
+  --folderCreatedPadding: calc(.5em + .25vw);
+  --createFont: calc(.25em + 2vw);
+  --createFormGap: calc(.25em + 1vw);
+}
+.createFolderWrapper{
+ height: var(--deleteSecHeight);
+ display: flex;
+ margin-bottom: calc(var(--folderGap) * 2);
+ padding: var(--folderPaddingHeight) var(--folderPadding);
+}
+
+.folderCreator{
+  display: flex;
+}
+
+.createFolder{
+  display: flex;
+}
+
+.createFoldersvg{
+  fill: var(--darkest);
+  height: var(--deleteSecHeight);
+  width: var(--deleteSecHeight);
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  /* border-radius: 1em; */
+}
+
+.createFoldersvg{
+  border-radius: 1em;
+}
+
+.createFoldersvg:hover{
+  background-color: var(--darkest);
+  fill: var(--white);
+  
+}
+
+.createFolderButtonTop{
+  background: transparent;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.createFolder{
+  display: flex;
+  justify-content: space-between;
+  gap: var(--createFormGap);
+  align-items: center;
+  background-color: var(--beige);
+  border-radius: 1em;
+  padding: var(--folderCreatedPadding);
+  
+}
+
+.insertedFolderForm{
+  display: flex;
+  align-items: center;
+  padding: var(--formCreatePadding);
+}
+
+.folderNameCreator{
+  background-color: var(--offWhite);
+  height: calc(.75em + 1vh);
+  font-size: var(--createFont);
+  padding: .25em .5em;
+  border-radius: 1em;
+}
+
+.inputFileNameLabel{
+  font-size: var(--createFont);
+  font-weight: bold;
+  color: var(--darkest);
+}
+
+.createFolderButton{
+  background-color: var(--sage);
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1em;
+  padding: calc(.5em + .25vw);
+  color: var(--darkest);
+  font-weight: bold;
+  font-size: var(--createFont);
+}
+
+.createFolderButton:hover{
+  background-color: var(--darkest);
+  color: var(--white);
+ 
+
+}
+
+.folderButton{
+  background: transparent;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.foldersvg{
+  fill: var(--darkest);
+  height: var(--deleteSecHeight);
+  width: var(--deleteSecHeight);
+  position: relative;
+  overflow: hidden;
 }
 
 .folder {
@@ -29,6 +143,7 @@
   background-color: var(--beige);
   padding: var(--folderPaddingHeight) var(--folderPadding);
   width: calc(100% - var(--folderPadding) * 2);
+  border-radius: 1em;
 }
 
 input {
@@ -72,14 +187,9 @@ input {
   align-items: center;
 }
 
-.createFolderWrapper{
-  display: flex;
-  padding-bottom: var(--createFolderBottomPad);
-}
 
-.createFolder{
-  display: flex;
-}
+
+
 
 /* confirm delete styles */
 
@@ -133,6 +243,7 @@ input {
   font-size: var(--deleteP);
   text-align: center;
   border: none;
+  border-radius: 1em;
 }
 
 .confirmYes{

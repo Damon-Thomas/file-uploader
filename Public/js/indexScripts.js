@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // This script is used to open form to add a folder to the database and on the page
 let open = false;
-const createFolderButton = document.querySelector(".createFolderButton");
+const createFolderButton = document.querySelector(".createFolderButtonTop");
 const htmlLocation = document.querySelector(".insertedFolderForm");
 const folderCreationHtml = window.folderCreationHtml; // Access the variable from the window object
 createFolderButton.addEventListener("click", () => {
