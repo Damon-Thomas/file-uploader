@@ -16,7 +16,9 @@
     display: flex;
     flex-direction: column;
     gap: .5em;
-    padding-bottom: var(--headerBottomPadding);
+    border-bottom: 1px solid var(--sage); ;
+    margin-bottom: var(--headerBottomPadding);
+    padding-bottom: 5px;
 }
 
 .subHead{
