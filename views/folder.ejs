@@ -1,66 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/general.css">
-    <link rel="stylesheet" href="/css/header.css">
-    <link rel="stylesheet" href="/css/folderStyles.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/general.css" />
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/folderStyles.css" />
     <title><%= folderName %></title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <%- include('header', {url : url}) %>
     <h2 class="folderTitle"><%= folderName %></h2>
-    
+
     <div class="fileUploadContainer">
-        <h4 class="fileUpload">Upload a File:</h4>
-        <form id="fileUploadForm" action="/fileupload" enctype="multipart/form-data" method="post">
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="File Name" name="fileName" id="fileName">
-              <%- include('formError', {selector: 'fileName', errors: errors}) %>
-              <input type="file" class="form-control-file" name="uploaded_file" id="uploaded_file">
-              <%- include('formError', {selector: 'file', errors: errors}) %>
-              <input type="hidden" name="folderId" value="<%= folderId %>"> <!-- Hidden input for folderId -->
-              <input type="submit" value="Save File" class="btn btn-default">
-              <p class="error fileUpError" id="fileUpError" style="display: none;">Please Add a File Name and Attach a File</p>
-             
-            </div>
-        </form>
+      <h4 class="fileUpload">Upload a File:</h4>
+      <form
+        class="fileUploadForm fullWidth"
+        id="fileUploadForm"
+        action="/fileupload"
+        enctype="multipart/form-data"
+        method="post"
+      >
+        <div class="inputWerrors">
+          <input
+            type="text"
+            class="fileNameInput"
+            placeholder="File Name"
+            name="fileName"
+            id="fileName"
+          />
+          <%- include('formError', {selector: 'fileName', errors: errors}) %>
+        </div>
+        <div class="inputWerrors singly">
+          <input
+            type="file"
+            class="form-control-file"
+            name="uploaded_file"
+            id="uploaded_file"
+          />
+
+          <%- include('formError', {selector: 'file', errors: errors}) %>
+        </div>
+        <input type="hidden" name="folderId" value="<%= folderId %>" />
+        <!-- Hidden input for folderId -->
+        <div class="inputWerrors singly">
+            <input type="submit" value="Save File" class="btn btn-default submit-file" />
+            <li class="formError noBullet"></li>
+        </div>
+        <p class="error fileUpError" id="fileUpError" style="display: none">
+          Please Add a File Name and Attach a File
+        </p>
+      </form>
     </div>
 
     <div class="fileCabinet">
-        <% for(let i = 0; i < files.length; i++) { %>
-            <div class="file">
-                <div class="leftContent">
-                    <p class="fileInnerName"><%= files[i].filename %></p>
-                    <p class="fileInnerSize"><%= files[i].size %></p>
-                    <p class="fileInnerUpDate"><%= new Date(files[i].createdAt).toLocaleString() %></p>
-                </div>
-                <div class="rightContent">
-                    <div class="shareContainer">
-                        <svg class="copyLinkButton" data-file-id="<%= files[i].id %>" data-file-link="<%= files[i].content %>" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T720-200q0-17-11.5-28.5T680-240q-17 0-28.5 11.5T640-200q0 17 11.5 28.5T680-160ZM200-440q17 0 28.5-11.5T240-480q0-17-11.5-28.5T200-520q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440Zm480-280q17 0 28.5-11.5T720-760q0-17-11.5-28.5T680-800q-17 0-28.5 11.5T640-760q0 17 11.5 28.5T680-720Zm0 520ZM200-480Zm480-280Z"/></svg>                        
-                        <p data-file-id="<%= files[i].id %>" style="display: none;" class="hiddenNotice">Copied to Clipboard!</p>
-                    </div>
-                    <div class="downloadContainer">
-                        <a data-file-link="<%= files[i].content %>" href="<%= files[i].content %>" class="downloadButton" data-file-name="<%= files[i].filename %>" target="_blank">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="m720-120 160-160-56-56-64 64v-167h-80v167l-64-64-56 56 160 160ZM560 0v-80h320V0H560ZM240-160q-33 0-56.5-23.5T160-240v-560q0-33 23.5-56.5T240-880h280l240 240v121h-80v-81H480v-200H240v560h240v80H240Zm0-80v-560 560Z"/></svg>
-                        </a>
-                    </div>
-                    <div class="deleteContainer">
-                        <button class="deleteFileButton svgButton" data-file-id="<%= files[i].id %>">
-                            <svg class="deletesvg" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"/></svg>
-                        </button>
-                        <div class="confirmDelete" style="display: none;">
-                            <p>Are you sure?</p>
-                            <button class="confirmYes" data-file-id="<%= files[i].id %>">Yes</button>
-                            <button class="confirmCancel">Cancel</button>
-                        </div>
-                    </div>
-                </div>
+      <% for(let i = 0; i < files.length; i++) { %>
+      <div class="file">
+        <div class="leftContent">
+          <p class="fileInnerName"><%= files[i].filename %></p>
+          <p class="fileInnerSize"><%= files[i].size %></p>
+          <p class="fileInnerUpDate">
+            <%= new Date(files[i].createdAt).toLocaleString() %>
+          </p>
+        </div>
+        <div class="rightContent">
+          <div class="shareContainer">
+            <p
+              data-file-id="<%= files[i].id %>"
+              style="display: none"
+              class="hiddenNotice"
+            >
+              Copied to Clipboard!
+            </p>
+            <svg
+              class="copyLinkButton"
+              data-file-id="<%= files[i].id %>"
+              data-file-link="<%= files[i].content %>"
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#434343"
+            >
+              <path
+                d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T720-200q0-17-11.5-28.5T680-240q-17 0-28.5 11.5T640-200q0 17 11.5 28.5T680-160ZM200-440q17 0 28.5-11.5T240-480q0-17-11.5-28.5T200-520q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440Zm480-280q17 0 28.5-11.5T720-760q0-17-11.5-28.5T680-800q-17 0-28.5 11.5T640-760q0 17 11.5 28.5T680-720Zm0 520ZM200-480Zm480-280Z"
+              />
+            </svg>
+            
+          </div>
+          <div class="downloadContainer">
+            <a
+              data-file-link="<%= files[i].content %>"
+              href="<%= files[i].content %>"
+              class="downloadButton"
+              data-file-name="<%= files[i].filename %>"
+              target="_blank"
+            >
+              <svg
+              class="downloadsvg"
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#434343"
+              >
+                <path
+                  d="m720-120 160-160-56-56-64 64v-167h-80v167l-64-64-56 56 160 160ZM560 0v-80h320V0H560ZM240-160q-33 0-56.5-23.5T160-240v-560q0-33 23.5-56.5T240-880h280l240 240v121h-80v-81H480v-200H240v560h240v80H240Zm0-80v-560 560Z"
+                />
+              </svg>
+            </a>
+          </div>
+          <div class="deleteContainer">
+            <!-- <button
+              class="deleteFileButton svgButton"
+              data-file-id="<%= files[i].id %>"
+            > -->
+              <svg
+                class="deletesvg deleteFileButton svgButton"
+                data-file-id="<%= files[i].id %>"
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#434343"
+              >
+                <path
+                  d="m376-300 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 180q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520Zm-400 0v520-520Z"
+                />
+              </svg>
+            <!-- </button> -->
+          </div>
+          <!-- Modal Popup -->
+          <div class="modal" id="deleteModal-<%= files[i].id %>" style="display: none;">
+            <div class="modalContent">
+                <p class="deleteMessage">File will be deleted forever.</p>
+              <p class="deleteMessage">Are you sure?</p>
+              <div class="confirmButtons">
+                <button class="confirmYes" data-file-id="<%= files[i].id %>">
+                  Yes
+                </button>
+                <button class="confirmCancel">Cancel</button>
+              </div>
             </div>
-        <% } %>
+          </div>
+        </div>
+      </div>
+      <% } %>
     </div>
     <script type="module" src="/js/folderScripts.js"></script>
-</body>
+  </body>
 </html>

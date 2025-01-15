@@ -1,10 +1,127 @@
 :root {
-    --folderColor: #f0f0f0;
-    --folderHoverColor: #e0e0e0;
-    --folderBorderColor: #d0d0d0;
-    --folderBorderHoverColor: #c0c0c0;
-    --folderInnerGap: calc(10px + 1vw);
-    --cabinetGap: calc(10px + 1vw);
+  
+    --folderInnerGap: calc(.25em + .5vw);
+    --cabinetGap: calc(.25em + .5vw);
+    --folderTitleSize: calc(1.5em + 1vw);
+    --createFileTitleSize: calc(1em + .75vw);
+    --fileCreatorGap: calc(.5em + 2vw);
+    --uploadHeight: calc(1em + 2vh);
+    --uploadFontSize: calc(.4rem + .75vw);
+    --filePadding: calc(.25em + .25vw);
+    --fileHeight: calc(1.75em + 1vh);
+    --fileFontSize: calc(.5em + .75vw);
+    --fileNameFontSize: calc(.75em + .8vw);
+    --buttonGap: calc(.25em + .5vw);
+    --buttonWidth: calc(4em + 1vw);
+    --modalButtonWidth: calc(4em + 1vw);
+   --svgDimension: calc(1em + 1vw);
+   --folderButtonGap: calc(.5em + .5vw);
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+li{
+    list-style-type: none;
+}
+
+.folderTitle{
+    font-size: var(--folderTitleSize);
+    font-weight: bold;
+    color: var(--darkest);
+    margin-bottom: calc(.5em + .5vw);
+}
+
+.fileUploadContainer{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.fileUpload{
+    font-size: var(--createFileTitleSize);
+}
+
+.fileUploadForm{
+    display: flex;
+    align-items: center;
+    gap: calc(.25em + 2vw);
+    margin: .5em 0 calc(1em + 1vh) 0;
+
+}
+
+.inputWerrors{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.inputWerrors.singly{
+ justify-content: center;
+}
+
+@media only screen and (max-width: 500px) {
+    .fileInnerSize, .fileInnerUpDate {
+        display: none;
+    }
+}
+
+.fileNameInput{
+    background-color: var(--beige);
+    padding: 0px .5em;
+    font-size: var(--uploadFontSize);
+    border-radius: .5em;
+    
+    width: 30vw;
+    
+} 
+
+#uploaded_file, .fileNameInput, .submit-file{
+    height: var(--uploadHeight);
+} 
+#uploaded_file {
+    font-size: var(--uploadFontSize);
+    font-weight: bold;
+    width: calc(75px + 15vw);
+    
+    
+}
+#uploaded_file::file-selector-button {
+    padding: .5em;
+    background-color: var(--darkest);
+    margin-right: 1em;
+    border: none;
+    color: var(--white);
+    height: 100%;
+    border-radius: .25em;
+    cursor: pointer;
+  }
+
+.submit-file{
+    font-size: var(--uploadFontSize);
+    font-weight: bold;
+    /* padding: .75em; */
+    background-color: var(--sage);
+    margin-right: 1em;
+    border: none;
+    color: var(--darkest);
+    
+    border-radius: .25em;
+    cursor: pointer;
+}
+
+.submit-file:hover{
+    background-color: var(--darkest);
+    color: var(--white);
+}
+
+.formError{
+    margin-top: .25em;
+    font-size: var(--uploadFontSize);
+    font-weight: bold;
+    color: var(--red);
+    height: 1em;
 }
 
 .fileCabinet {
@@ -17,21 +134,141 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--folderColor);
-    border: 1px solid var(--folderBorderColor);
+    color: var(--darkest);
+    background-color: var(--beige);
+    padding: var(--filePadding);
+    border-radius: .5em;
+    box-shadow: 1px 1px 1px var(--sage);
+    height: var(--fileHeight);
 }
 
-.file:hover {
-    background-color: var(--folderHoverColor);
-    border: 1px solid var(--folderBorderHoverColor);
-}
+
 
 .leftContent, .rightContent {
     display: flex;
+    align-items: center;
     gap: var(--folderInnerGap);
 }
 
 .fileInnerName, .fileInnerSize, .fileInnerUpDate{
     font-size: large;
     font-weight: bold;
+}
+
+.fileInnerName, .fileInnerSize, .fileInnerUpDate{
+    font-size: var(--fileFontSize);
+}
+
+/* right */
+.rightContent{
+    justify-content: flex-end;
+    gap: var(--folderButtonGap);
+}
+
+.shareContainer, .downloadContainer, .deleteContainer{
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    height: var(--fileHeight);
+}
+
+
+
+/* share stuff */
+.hiddenNotice{
+    font-size: var(--uploadFontSize);
+    color: var(--darkest);
+}
+
+.copyLinkButton:hover, .downloadsvg:hover{
+    fill: var(--sage);
+    cursor: pointer;
+}
+
+/* modal */
+.confirmButtons{
+    display: flex;
+    gap: .5em;
+    justify-content: center;
+    margin-top: 1em;
+}
+.confirmYes, .confirmCancel{
+    width: var(--modalButtonWidth);
+    font-size: var(--fileFontSize);
+    font-weight: bold;
+    border-radius: .25em;
+    cursor: pointer;
+    border: none;
+    background-color: var(--beige);
+    padding: .25em;
+}
+.confirmYes{
+    background-color: var(--red);
+    color: var(--white); 
+}
+.deleteMessage{
+    font-size: var(--modalFontSize);
+    font-weight: bold;
+    text-align: center;
+}
+
+.deletesvg{
+    fill: var(--red);
+}
+
+.deletesvg:hover{
+    fill: red;
+    cursor: pointer;
+}
+
+.rightContent svg{
+    width: var(--svgDimension);
+    height: var(--svgDimension);
+}
+
+
+
+
+
+
+
+
+.fileInnerName{
+    width: 25vw;
+    font-size: var(--fileNameFontSize);
+    font-weight: bolder;
+    
+}
+
+
+
+
+
+
+
+
+
+.modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modalContent {
+    background-color: var(--white);
+    padding: 20px;
+    border: 1px solid var(--darkest);
+    border-radius: .5em;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
 }

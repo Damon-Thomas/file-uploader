@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM loaded");
   try {
@@ -46,50 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Error initializing form validation:", error);
   }
 
-  document.querySelectorAll(".deleteFileButton").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      const fileId = button.getAttribute("data-file-id");
-      const confirmDelete = button.nextElementSibling;
-      button.style.display = "none";
-      confirmDelete.style.display = "block";
-    });
-  });
-
-  document.querySelectorAll(".confirmCancel").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      const confirmDelete = button.parentElement;
-      const deleteButton = confirmDelete.previousElementSibling;
-      confirmDelete.style.display = "none";
-      deleteButton.style.display = "block";
-    });
-  });
-
-  document.querySelectorAll(".confirmYes").forEach((button) => {
-    button.addEventListener("click", async (event) => {
-      console.log("confirm delete fires on click");
-      const fileId = button.getAttribute("data-file-id");
-      try {
-        const response = await fetch(`/delete-file/${fileId}`, {
-          method: "DELETE",
-        });
-        console.log("response:", response);
-
-        if (!response.ok) {
-          throw new Error("Failed to delete file");
-        }
-
-        const result = await response.json();
-        console.log("File deleted:", result);
-
-        // Remove the file from the DOM
-        const fileElement = button.closest(".file");
-        fileElement.remove();
-      } catch (error) {
-        console.error("Error deleting file:", error);
-      }
-    });
-  });
-
   //download file
   document.querySelectorAll(".downloadButton").forEach((button) => {
     button.addEventListener("click", async (event) => {
@@ -121,5 +76,57 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  
+  //modal
+  document.querySelectorAll('.deleteFileButton').forEach(button => {
+    button.addEventListener('click', () => {
+        const fileId = button.getAttribute('data-file-id');
+        document.getElementById(`deleteModal-${fileId}`).style.display = 'flex';
+    });
+  });
+
+  document.querySelectorAll('.confirmCancel').forEach(button => {
+    button.addEventListener('click', () => {
+        button.closest('.modal').style.display = 'none';
+    });
+  });
+
+  document.querySelectorAll('.confirmYes').forEach(button => {
+    button.addEventListener('click', async () => {
+        const fileId = button.getAttribute('data-file-id');
+        try {
+            const response = await fetch(`/delete-file/${fileId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete file');
+            }
+
+            const result = await response.json();
+            console.log('File deleted:', result);
+
+            // Remove the file from the DOM
+            const fileElement = button.closest('.file');
+            fileElement.remove();
+            button.closest('.modal').style.display = 'none';
+        } catch (error) {
+            console.error('Error deleting file:', error);
+        }
+    });
+  });
+
+
+
+
+
+
+
+
+  // Add event listener for confirmYes button if needed
+  // document.querySelectorAll('.confirmYes').forEach(button => {
+  //     button.addEventListener('click', () => {
+  //         // Handle the delete confirmation
+  //     });
+  // });
+
 });
